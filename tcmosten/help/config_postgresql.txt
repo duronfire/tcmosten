@@ -1,0 +1,12 @@
+pg_hba.conf
+
+add "host    all             all             0.0.0.0/0           trust"
+where 0.0.0.0/0 is the ip range for permitted clients.
+192.168.x.x is 192.168.0.0/16
+
+ 
+postgresql.conf
+
+change listen_addresses = 'localhost' to 'xxx.xxx.xxx.xxx, xxx.xxx.xxx.xxx'
+'*' for all host interfaces/adresses
+which is the host ip adresse or adresses

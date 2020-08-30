@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'tcmosten.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydatabase',
-        'USER': 'mydatabaseuser',
-        'PASSWORD': 'mypassword',
+        'NAME': 'tcmosten',
+        'USER': 'wz',
+        'PASSWORD': '5357940Zwt',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
