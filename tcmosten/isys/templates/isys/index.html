@@ -1,0 +1,9 @@
+{% if testvar %}
+    <ul>
+    {% for var in testvar %}
+        <p>{{var}}</p>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}

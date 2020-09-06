@@ -79,8 +79,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'tcmosten',
         'USER': 'wz',
-        'PASSWORD': '5357940Zwt',
-        'HOST': '127.0.0.1',
+        'PASSWORD': '',
+        'HOST': 't440p',
         'PORT': '5432',
     }
 }

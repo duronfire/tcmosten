@@ -1,3 +1,14 @@
+pg_ctl -D C:\SQLData\tcmosten\dummy\data stop
+rm -Recurse -Force C:\SQLData\tcmosten\dummy\data
+mkdir C:\SQLData\tcmosten\dummy\data
+initdb.exe -E UTF8 -D C:\SQLData\tcmosten\dummy\data
+cp -Force C:\SQLData\tcmosten\pg_hba.conf C:\SQLData\tcmosten\dummy\data\
+cp -Force C:\SQLData\tcmosten\postgresql.conf C:\SQLData\tcmosten\dummy\data\
+pg_ctl -D C:\SQLData\tcmosten\dummy\data start
+createuser.exe -h t440p -d -U st.gallen -s wz
+createdb.exe -h t440p -U st.gallen tcmosten
+
+
 pg_hba.conf:
 
 add "host    all             all             0.0.0.0/0           trust"
