@@ -1,4 +1,9 @@
 {% if testvar %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
     <ul>
     {% for var in testvar %}
         <p>{{var}}</p>
