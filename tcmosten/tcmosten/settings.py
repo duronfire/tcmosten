@@ -127,5 +127,5 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR,'static_ROOT')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'thirdparty','bootstrap'),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'..','thirdparty','bootstrap'),]
 
