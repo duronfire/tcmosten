@@ -19,6 +19,10 @@ def index(request):
         return HttpResponse('yes!')
 
 
+
+def nav(request):
+    return render(request, 'isys/nav.html', {})
+
         
 
     
