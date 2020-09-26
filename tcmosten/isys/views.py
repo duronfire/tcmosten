@@ -24,5 +24,6 @@ def nav(request):
     return render(request, 'isys/nav.html', {})
 
         
-
+def calendar(request):
+    return render(request, 'isys/calendar.html', {})
     
