@@ -28,7 +28,6 @@ def nav(request):
         
 def calendar(request):
     return render(request, 'isys/calendar.html', {})
-<<<<<<< HEAD
     
 
 def http_test(request):
@@ -45,6 +44,3 @@ def http_test(request):
     elif request.method=='POST':
         form=http_testform(request.POST)
         return HttpResponse('yes!')
-=======
-    
->>>>>>> c936bcad8848899f9239427733dbc63ac2c0d488
