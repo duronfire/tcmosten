@@ -51,7 +51,9 @@
       <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">Neuer Patient</a>
+          <a class="nav-link{% if request.resolver_match.view_name == 'home' %} active{% endif %}" href="#">Neuer Patienten
+            <span data-feather="plus-circle"></span>
+          </a>
         </li>
       </ul>
       <ul class="navbar-nav px-3">
@@ -137,15 +139,25 @@
 
 
     <div class="col-5 pt-3 px-4">
+<<<<<<< HEAD
+
+      {% block calendar %}{% endblock %}
+
+=======
 
       <h1 class="h2">Dashboard</h1>
 
       <h2>Section titleddddddddddddddddddd</h2>
+>>>>>>> c936bcad8848899f9239427733dbc63ac2c0d488
     </div>
 
     <div class="col-5 pt-3 px-4">
 
+<<<<<<< HEAD
+      {% block newpatient %}{% endblock %}
+=======
       <h1 class="h2">Dashboard</h1>
+>>>>>>> c936bcad8848899f9239427733dbc63ac2c0d488
 
       <h2>Section titledddddddddddddddddd</h2>
     </div>
@@ -158,10 +170,23 @@
 
 
 
+    </div>
   </div>
+<<<<<<< HEAD
+  <script src="{% static 'js/jquery-3.5.1.slim.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/feather.min.js' %}"></script>
+      <script>
+        feather.replace()
+      </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+  <body>
+=======
 </div>
 <script src="{% static 'js/jquery-3.5.1.slim.min.js' %}"></script>
 <script src="{% static 'css/bootstrap.bundle.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+>>>>>>> c936bcad8848899f9239427733dbc63ac2c0d488
 </html>

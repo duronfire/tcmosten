@@ -1,0 +1,3 @@
+'disable show reminder in Option "Erweitert"!
+'disable reminder default time in Option "kalendar"!
+'put content in outlook_interface.bas into outlook --> macro --> thisoutlooksession

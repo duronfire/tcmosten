@@ -1,8 +1,10 @@
+import os
 from django.shortcuts import render
 from django.http import HttpResponse
 
 
 from .models.dummy import Dummy,Dummyform
+from .models.http_test import http_test,http_testform
 
 
 # Create your views here.
@@ -26,4 +28,23 @@ def nav(request):
         
 def calendar(request):
     return render(request, 'isys/calendar.html', {})
+<<<<<<< HEAD
     
+
+def http_test(request):
+    print("here is http test!")
+    print(request.GET)
+    print(os.getcwd())
+
+
+
+    if request.method=='GET':
+        form=http_testform()
+        return render(request, 'isys/http_test.html', {'form': form})
+
+    elif request.method=='POST':
+        form=http_testform(request.POST)
+        return HttpResponse('yes!')
+=======
+    
+>>>>>>> c936bcad8848899f9239427733dbc63ac2c0d488

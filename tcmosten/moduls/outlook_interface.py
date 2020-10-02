@@ -1,5 +1,5 @@
 import win32com.client,win32ui
-import datetime,os
+import datetime,os,json,re
 
 
 
@@ -28,10 +28,10 @@ end_time=sunday.strftime(time_format)
 print("start",start_time)
 print("end",end_time)
 
-print(calendar.Items(9).Start)
+# print("Deleted???", calendar.Items(2).Deleted) # example for getting property
 
 sFilter="[Start] > '" + start_time  + "'" + " AND [Start] < '" + end_time  + "'" # d/m/y 02/1/2003 or 25/12/2003 no zero for month. Day/Month/Year order must be same as system! For German d/m/y, for English m/d/y 
-print(sFilter)
+print("time format filter is: ", sFilter)
 
 week_appointments=calendar.Items.Restrict(sFilter)
 
@@ -39,31 +39,41 @@ print("total appointments items", calendar.Items.Count)
 print("found appointments items this week", week_appointments.Count)
 
 week_appointments=sorted(week_appointments,key=lambda x:x.Start) #sort week_appointments by start time
-print(week_appointments)
+print("weer appointments are: ", week_appointments)
 
 appointment_starttimes=[x.Start for x in week_appointments]
-print(appointment_starttimes)
+print("appointmen start time is: ", appointment_starttimes)
 
+appointments_output={}
+id=0
 for i in week_appointments:
-    print("Subject:", i.Subject)
-
-
-
-    recipients_count=i.Recipients.Count
-    print("Recipients:",recipients_count)
-    if recipients_count is 2:
-        print("Recipients:", i.Recipients.Item(2))
-    elif recipients_count > 2:
-        print("Error: Too much recipients at one appointment!")
-    elif recipients_count is 1:
-        print("Error: No recipients!")
-    else:
-        print("Error: Check OUTLOOK, No organizer!") 
-
-
-
+    print("Name in Subject:", i.Subject)
+    print("Behandlung in Location:", i.Location)
     print("Start:", i.Start)
-    print("End:",i.End)
+    print("End:", i.End)
+
+    print("Last modified:", i.LastModificationTime)
+    print("reminder:", i.ReminderSet)
+    appointments_output[id]={"name":i.Subject,"status":i.Location,"start":re.sub("\:[0-9]+\+.*","",str(i.Start)),"end":re.sub("\:[0-9]+\+.*","",str(i.End))}
+    id+=1
+
+    # deprecated:
+    # print("Recipients:",recipients_count)
+    # recipients_count=i.Recipients.Count
+    # if recipients_count == 2:
+    #     print("Recipients:", i.Recipients.Item(2))
+    # elif recipients_count > 2:
+    #     print("Error: Too much recipients at one appointment!")
+    # elif recipients_count == 1:
+    #     print("Error: No recipients!")
+    # else:
+    #     print("Error: Check OUTLOOK, No organizer!") 
+
+print(appointments_output)
+
+
+
+
 
 
 
