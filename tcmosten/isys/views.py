@@ -43,4 +43,6 @@ def http_test(request):
 
     elif request.method=='POST':
         form=http_testform(request.POST)
+        print(form.is_valid())
+        print(request.POST)
         return HttpResponse('yes!')
