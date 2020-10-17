@@ -1,3 +1,5 @@
+### Windows ###
+
 pg_ctl -D C:\SQLData\tcmosten\dummy\data stop
 rm -Recurse -Force C:\SQLData\tcmosten\dummy\data
 mkdir C:\SQLData\tcmosten\dummy\data
@@ -28,3 +30,59 @@ permit psql.exe under incoming rules
 permit PostgreSQL Server under programm & feature
 
 connect to server use: psql.exe -h xxx.xxx.xxx.xxx tcmosten
+
+
+### Linux ###
+
+same as windows for initdb
+
+change pgdata under linxu:
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-managing_confined_services-postgresql-configuration_examples
+
+View the SELinux context of the default database location for postgresql:
+~]# ls -lZ /var/lib/pgsql
+drwx------. postgres postgres system_u:object_r:postgresql_db_t:s0 data
+This shows postgresql_db_t which is the default context element for the location of database files. This context will have to be manually applied to the new database location that will be used in this example in order for it to function properly.
+Create a new directory for the new location of the database(s). In this example, /opt/postgresql/data/ is used. If you use a different location, replace the text in the following steps with your location:
+~]# mkdir -p /opt/postgresql/data
+Perform a directory listing of the new location. Note that the initial context of the new directory is usr_t. This context is not sufficient for SELinux to offer its protection mechanisms to PostgreSQL. Once the context has been changed, it will be able to function properly in the new area.
+~]# ls -lZ /opt/postgresql/
+drwxr-xr-x. root root unconfined_u:object_r:usr_t:s0   data
+Change the ownership of the new location to allow access by the postgres user and group. This sets the traditional Unix permissions which SELinux will still observe.
+~]# chown -R postgres:postgres /opt/postgresql
+Open the /etc/systemd/system/postgresql.service file with a text editor and modify the PGDATA and PGLOG variables to point to the new location:
+~]# vi /etc/systemd/system/postgresql.service
+PGDATA=/opt/postgresql/data
+PGLOG=/opt/postgresql/data/pgstartup.log
+Save this file and exit the text editor.
+If the /etc/systemd/system/postgresql.service file does not exist, create it and insert the following content:
+.include /lib/systemd/system/postgresql.service
+[Service]
+
+# Location of database directory
+Environment=PGDATA=/opt/postgresql/data
+Environment=PGLOG=/opt/postgresql/data/pgstartup.log
+Initialize the database in the new location:
+~]$ su - postgres -c "initdb -D /opt/postgresql/data"
+Having changed the database location, starting the service will fail at this point:
+~]# systemctl start postgresql.service
+Job for postgresql.service failed. See 'systemctl status postgresql.service' and 'journalctl -xn' for details.
+SELinux has caused the service to not start. This is because the new location is not properly labeled. The following steps explain how to label the new location (/opt/postgresql/) and start the postgresql service properly:
+Use the semanage utility to add a context mapping for /opt/postgresql/ and any other directories/files within it:
+~]# semanage fcontext -a -t postgresql_db_t "/opt/postgresql(/.*)?"
+This mapping is written to the /etc/selinux/targeted/contexts/files/file_contexts.local file:
+~]# grep -i postgresql /etc/selinux/targeted/contexts/files/file_contexts.local
+
+/opt/postgresql(/.*)?    system_u:object_r:postgresql_db_t:s0
+Now use the restorecon utility to apply this context mapping to the running system:
+~]# restorecon -R -v /opt/postgresql
+Now that the /opt/postgresql/ location has been labeled with the correct context for PostgreSQL, the postgresql service will start successfully:
+~]# systemctl start postgresql.service
+Confirm the context is correct for /opt/postgresql/:
+~]$ ls -lZ /opt
+drwxr-xr-x. root root system_u:object_r:postgresql_db_t:s0 postgresql
+Check with the ps command that the postgresql process displays the new location:
+~]# ps aux | grep -i postmaster
+
+postgres 21564  0.3  0.3  42308  4032 ?        S    10:13   0:00 /usr/bin/postmaster -p 5432 -D /opt/postgresql/data/
