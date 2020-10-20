@@ -38,6 +38,12 @@ same as windows for initdb
 
 change pgdata under linxu:
 
+open firewall 
+sudo firewall-cmd --add-service=postgresql --permanent
+sudo firewall-cmd --reload
+systemctl restart postgresql-12.service
+
+
 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-managing_confined_services-postgresql-configuration_examples
 
 View the SELinux context of the default database location for postgresql:

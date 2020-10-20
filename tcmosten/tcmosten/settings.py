@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'tcmosten',
         'USER': 'zhu',
         'PASSWORD': '',
-        'HOST': '',
+        'HOST': '192.168.2.124',
         'PORT': '5432',
     }
 }

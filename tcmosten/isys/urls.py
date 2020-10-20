@@ -6,5 +6,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('nav', views.nav, name='nav'),
     path('calendar', views.calendar, name='calendar'),
-    path('http_test', views.http_test, name='http_test'),
+    path('http_test/<state>', views.http_test_view, name='http_test'),
 ]

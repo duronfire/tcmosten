@@ -5,8 +5,11 @@ from django.forms import ModelForm
 
 
 class http_test(models.Model):
-    vorname = models.CharField(max_length=30,default="defaultname")
-    nachname = models.CharField(max_length=30,default="defaultname")
+    state = models.CharField(max_length=10,default="state")
+    pid = models.CharField(max_length=150,default="pid")
+    name = models.CharField(max_length=30,default="defaultname")
+    
+    
 
 
 class http_testform(ModelForm):

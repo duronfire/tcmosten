@@ -1,0 +1,44 @@
+||x|| Catch Point Http Error
+
+
+Add:
+
+1.       Ol(State, N,S,E,G)-->Post-->||1|| SQL(State, N,S,E,G) --> Query (N)--> Response with Ns,Gs --> ||2||  Ol UserForm Select/find/new -->
+
+    1)      If select old --> Post (with “select” and UID)  --> SQL (PID ADD in Table “Sitzung”) --> Response with PID and Stamp “Create” -->||2||  Ol (PID ADD) --> MsgBox add successfully
+
+    2)      If add new --> Post (with “new” and N,S,E,G)  --> SQL (ADD New User in Table User) --> SQL (PID ADD in Table “Sitzung”) --> Response with PID and Stamp “Create” -->||2||  Ol (PID ADD) --> MsgBox new add successfully
+
+    3)      If find old --> Use 1.
+
+ 
+
+Change:
+
+1.       Ol(PID,N,S,E,G) --> Post -->||1|| SQL(PID,N,S,E,G) --> Query (PID) -->
+
+2.       Check match =[0,1,>1]
+
+    (1)        If = 0 --> Synchro Process define
+
+    (2)        If = 1 --> Chain Query (N) --> check match = [0, 1]
+
+        1)      If = 0 --> Throw N change not allowed and reset N, N change only per add old/new
+
+        2)      If =1 --> SQL change S,E --> Response with “Change accepted” and Stamp “Change” -->||2||  Ol  MsgBox change accepted
+
+ 
+
+Delete:
+
+1.  Ol(PID,N,S,E,G) --> Post -->||1|| SQL(PID,N,S,E,G) --> Query (PID) -->
+
+1.       Check match =[0,1,>1]
+
+    (1)        If = 0 --> Synchro Process define
+
+    (2)        If = 1 --> Chain Query (S,E) --> check match = [0, 1]
+
+        1)      If = 0 --> Synchro Process define
+
+        2)      If =1 --> SQL del PID --> Response with “delete accepted” and Stamp “Delete” -->||2||  Ol  MsgBox delete accepted

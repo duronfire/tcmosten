@@ -1,0 +1,2 @@
+change field type can cause migrate error. i.e. charfield with values changes to datefield. Don't drop column, don't drop table!!
+solution: set all rows of this column to null and than migrate or delete whole database and migrate from new

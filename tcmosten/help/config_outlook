@@ -1,3 +1,18 @@
 'disable show reminder in Option "Erweitert"!
 'disable reminder default time in Option "kalendar"!
 'put content in outlook_interface.bas into outlook --> macro --> thisoutlooksession
+
+
+date time format:
+separators for date and time i.e. "2020/01/31 14:05:01" is "/" and ":". Separators in Output Text depand on system setting. Deutsch --> "2020.01.31 14:05:01"
+Order of format is defined by user: "2020/01/31 14:05:01" --> "yyyy/MM/dd HH:mm:ss" where must use separators "/" and ":" for Format() function
+
+outlook .pst/.ost databank
+IMAP Account will be assigned to xxxx@xxxx.xx.ost defaultly(st.gallen@tcm-osten.ch.ost under appdata/local/microsoft/outlook). Calendar and Contacts are also stored in this file.
+If account is deleted, all data will be lost!!!!!!!!!!!!!!!!!
+A xxxx.pst file has to be created for safty reason:
+Under account-settings --> add xxx.pst --> set it to default --> copy all Ol-Folder-Items (i.e. Calendar, Contacts etc.) to created .pst "Store" (VBA-Object / Ol-Folder of xxx.pst) in Outlook 
+--> Close Outlook --> Delete xxxxx.ost under appdata/local/microsoft/outlook --> Restart Outlook
+After then, a empty xxxx@xxxxx.xxx.ost file will be created again, whereby Emails are pulled from server again and stored in it. BUT Calendar & Co. will not be created under xxxxx@xxxx.xxx.ost again!!!! --> All Calendar & Co. stored under Created .pst Store separatlly, which were copied in last step before. 
+
+To get the "defaultfolder" Calendar Object use Application.GetNamespace("MAPI").Stores.Item("xxx name of pst").GetDefaultFolder(9).Items
