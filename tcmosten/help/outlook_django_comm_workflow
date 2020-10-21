@@ -1,3 +1,37 @@
+Function description of comm interface outlook/django
+1. in order to keep calendar in outlook as main work space for clinic, patient info must be labeled and synchronized with django
+2. non-patient info must not be labeled and synchronized
+3. category must be auto set to a pre-defined i.e. "new patient/old new patient etc." as appointment was add.
+4. by changing of appointment, date time and category should be synchronized. 
+5. Changing patient name in existing appointment is not allowed! Suggested Work around is delete and recreate appointment by mistake.
+
+Specifications:
+
+1. Label for identifying Patient-info is defined: "P:" or "p:" in subject field in outlook by adding new appointment
+2. By changing/deleting of appointment, PID will be used to identify if it's a patient appointment. PID = null for non-patient appointment.
+3. PID is a userdefined property in Outlook and is primary key in SQL Table "Sitzung"
+4. UID is a temporay index for returned ordered object from query. UID enables selecting returened ordered object by index.
+5. Using uniform UserForm Select/find/new as input for adding appointment for all old and new patients.
+6. Fault by adding/changing/deleting must be protocolled on local disk 
+7. Patient Contact must be sychronized with SQL Table "Patient". Difference must be protocolled on location same as Fault-Protocol.
+8. Patient appointment must be sychronized with SQL Table "Sitzung". Difference must be protocolled on location same as Fault-Protocol.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ||x|| Catch Point Http Error
 
 

@@ -16,3 +16,9 @@ Under account-settings --> add xxx.pst --> set it to default --> copy all Ol-Fol
 After then, a empty xxxx@xxxxx.xxx.ost file will be created again, whereby Emails are pulled from server again and stored in it. BUT Calendar & Co. will not be created under xxxxx@xxxx.xxx.ost again!!!! --> All Calendar & Co. stored under Created .pst Store separatlly, which were copied in last step before. 
 
 To get the "defaultfolder" Calendar Object use Application.GetNamespace("MAPI").Stores.Item("xxx name of pst").GetDefaultFolder(9).Items
+
+
+Outlook category:
+to enable category all Calendar & Co. must be stored in a .pst file, as written in last step.
+
+
