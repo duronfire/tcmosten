@@ -33,43 +33,47 @@ print("end",end_time)
 sFilter="[Start] > '" + start_time  + "'" + " AND [Start] < '" + end_time  + "'" # d/m/y 02/1/2003 or 25/12/2003 no zero for month. Day/Month/Year order must be same as system! For German d/m/y, for English m/d/y 
 print("time format filter is: ", sFilter)
 
-week_appointments=calendar.Items.Restrict(sFilter)
 
-print("total appointments items", calendar.Items.Count)
-print("found appointments items this week", week_appointments.Count)
 
-week_appointments=sorted(week_appointments,key=lambda x:x.Start) #sort week_appointments by start time
-print("weer appointments are: ", week_appointments)
+# performance test loop
+for i in range(10000):
+    week_appointments=calendar.Items.Restrict(sFilter)
 
-appointment_starttimes=[x.Start for x in week_appointments]
-print("appointmen start time is: ", appointment_starttimes)
+    print("total appointments items", calendar.Items.Count)
+    print("found appointments items this week", week_appointments.Count)
 
-appointments_output={}
-id=0
-for i in week_appointments:
-    print("Name in Subject:", i.Subject)
-    print("Behandlung in Location:", i.Location)
-    print("Start:", i.Start)
-    print("End:", i.End)
+    week_appointments=sorted(week_appointments,key=lambda x:x.Start) #sort week_appointments by start time
+    print("weer appointments are: ", week_appointments)
 
-    print("Last modified:", i.LastModificationTime)
-    print("reminder:", i.ReminderSet)
-    appointments_output[id]={"name":i.Subject,"status":i.Location,"start":re.sub("\:[0-9]+\+.*","",str(i.Start)),"end":re.sub("\:[0-9]+\+.*","",str(i.End))}
-    id+=1
+    appointment_starttimes=[x.Start for x in week_appointments]
+    print("appointmen start time is: ", appointment_starttimes)
 
-    # deprecated:
-    # print("Recipients:",recipients_count)
-    # recipients_count=i.Recipients.Count
-    # if recipients_count == 2:
-    #     print("Recipients:", i.Recipients.Item(2))
-    # elif recipients_count > 2:
-    #     print("Error: Too much recipients at one appointment!")
-    # elif recipients_count == 1:
-    #     print("Error: No recipients!")
-    # else:
-    #     print("Error: Check OUTLOOK, No organizer!") 
+    appointments_output={}
+    id=0
+    for i in week_appointments:
+        print("Name in Subject:", i.Subject)
+        print("Behandlung in Location:", i.Location)
+        print("Start:", i.Start)
+        print("End:", i.End)
 
-print(appointments_output)
+        print("Last modified:", i.LastModificationTime)
+        print("reminder:", i.ReminderSet)
+        appointments_output[id]={"name":i.Subject,"status":i.Location,"start":re.sub("\:[0-9]+\+.*","",str(i.Start)),"end":re.sub("\:[0-9]+\+.*","",str(i.End))}
+        id+=1
+
+        # deprecated:
+        # print("Recipients:",recipients_count)
+        # recipients_count=i.Recipients.Count
+        # if recipients_count == 2:
+        #     print("Recipients:", i.Recipients.Item(2))
+        # elif recipients_count > 2:
+        #     print("Error: Too much recipients at one appointment!")
+        # elif recipients_count == 1:
+        #     print("Error: No recipients!")
+        # else:
+        #     print("Error: Check OUTLOOK, No organizer!") 
+
+    print(appointments_output)
 
 
 

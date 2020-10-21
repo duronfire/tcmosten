@@ -22,6 +22,7 @@ Specifications:
 
 
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -29,8 +30,7 @@ Specifications:
 
 
 
-
-
+Synchronized Workflow Ol:
 
 ||x|| Catch Point Http Error
 
@@ -76,3 +76,31 @@ Delete:
         1)      If = 0 --> Synchro Process define
 
         2)      If =1 --> SQL del PID --> Response with “delete accepted” and Stamp “Delete” -->||2||  Ol  MsgBox delete accepted
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+Asynchronized Workflow Ol:
+
+Add:
+1. Select Calendar date time and write Label "p:" with complete name or part of name --> UserForm UserForm Select/find/new --> 
+    1). If select old name in search field -> create meeting item with selected name and time --> add and set Sync-Label to false --> add and set Patient-Label --> save  
+    2). If add new --> If old patient found With Confirmation MsgBox "create new although old list is not empty", vbYesNo, "Create New Patient" --> create user --> create meetingitem with name and time --> add and set Sync-Label to false --> add and set Patient-Label --> save  
+    3). If change name in listbox and find again --> 1).    
+
+change:
+1. Making changes --> Check Patient-Label, Only if with Patient-Label -->  read properties (Subject, datetime participate etc.) by write event --> 
+    1). If Name changed in Subject or participate --> MsgBox "change name not allowed, changes will not be saved. Delete the appointment by wrong name instead". 
+    2). If Only Date Time changes --> Save and Reset Sync-Label to false  
+
+Logically Delete (physically move to):
+1. Delete (move to) appointment --> Check Patient-Label, Only if with Patient-Label --> catch appointment entryid by event beforemoveto --> set Sync-Label to false  
+ 
+Synchronization workflow Ol-Django:
+1. Client send GET local Ol-Info to Django (per Ol/Browser) --> Django send GET Sync-Request to local python Http-Server --> local python Http-Server call python sychronization function --> retrieve all Ol-Items with ".restrict(Sync-Label = false)" --> local Http-Server POST retrieved info to Django-Server --> Django synchronize SQL Database --> send GET "OK" to local Http-Server --> call python function to set Sync-Label to True on all retrieved items --> send GET "Commit changes" 
+2. Admin-Client send GET ALL Ol-Info to Django (per Browser) --> Django send GET Sync-Request to all local python Http-Servers --> local python Http-Server call python synchronization function --> retrieve all Ol-Items with ".restrict(Sync-Label = false)" --> local Http-Servers POST retrieved info to Django-Server --> Django synchronize SQL Database --> send GET "OK" to local Http-Server --> call python function to set Sync-Label to True on all retrieved items --> send GET "Commit changes" 
+!!!!protocol synchronization in every step!!!!
