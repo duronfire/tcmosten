@@ -125,7 +125,7 @@ Sync run:
 "idle", "run", "error"
 
 Item state:
-"onlocal", "changed", "changed_aft_error", "onserver"
+"created", "changed", "changed_aft_error", "onserver"
 
 local                                                               Server
                 --> GET Request to sync link on Server -->
