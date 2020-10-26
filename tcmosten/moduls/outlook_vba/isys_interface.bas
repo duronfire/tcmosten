@@ -1,7 +1,26 @@
-Dim winHttp, workSheet As Object
+Public winHttp, workSheet As Object
 Const additemURL = "http://localhost:8000/isys/http_test/add"
 Const changeitemURL = "http://localhost:8000/isys/http_test/change"
 Const moveitemURL = "http://localhost:8000/isys/http_test/move"
+
+Public Const uprop_ISYS = "ISYS"
+Public Const uprop_patientlabel = "patientlabel"
+Public Const uprop_lastsync = "lastsync"
+Public Const uprop_startsync = "startsync"
+Public Const uprop_syncstate = "syncstate"
+Public Const uprop_itemstate = "itemstate"
+Public Const uprop_syncrun = "syncrun"
+
+
+Public Const uprop_patient_entryid = "pentryid"
+Public Const uprop_therapeut_fullname = "tpfullname"
+Public Const uprop_therapeut_pid = "tppid"
+Public Const uprop_apcategory = "apcategory"
+
+
+
+
+
 
 Public Sub Auto_Run()
 
@@ -96,3 +115,49 @@ Public Sub Select_patient()
     form_select.Show
     
 End Sub
+
+Public Sub set_userproperties(APFolder As folder, CTFolder As folder)
+
+
+    If APFolder.UserDefinedProperties.Find(uprop_ISYS) Is Nothing Then
+    
+        APFolder.UserDefinedProperties.Add uprop_ISYS, olText
+    
+        APFolder.UserDefinedProperties.Add uprop_patientlabel, olText
+
+        CTFolder.UserDefinedProperties.Add uprop_patientlabel, olText
+        
+        APFolder.UserDefinedProperties.Add uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime
+        
+        CTFolder.UserDefinedProperties.Add uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime
+
+        APFolder.UserDefinedProperties.Add uprop_startsync, olDateTime, olFormatDateTimeShortDateTime
+
+        CTFolder.UserDefinedProperties.Add uprop_startsync, olDateTime, olFormatDateTimeShortDateTime
+        
+        APFolder.UserDefinedProperties.Add uprop_syncstate, olText
+
+        CTFolder.UserDefinedProperties.Add uprop_syncstate, olText
+        
+        APFolder.UserDefinedProperties.Add uprop_itemstate, olText
+
+        CTFolder.UserDefinedProperties.Add uprop_itemstate, olText
+
+        APFolder.UserDefinedProperties.Add uprop_syncrun, olText
+
+        CTFolder.UserDefinedProperties.Add uprop_syncrun, olText
+        
+        APFolder.UserDefinedProperties.Add uprop_patient_entryid, olText 'protect change of patient after appointment is added
+        
+        CTFolder.UserDefinedProperties.Add uprop_therapeut_fullname, olText 'protect change of therapeut after contact is added
+
+        CTFolder.UserDefinedProperties.Add uprop_therapeut_pid, olText 'protect delete of therapeut after contact is added
+
+        APFolder.UserDefinedProperties.Add uprop_therapeut_pid, olText 'protect change of therapeut after appointment is added
+
+        APFolder.UserDefinedProperties.Add uprop_apcategory, olText 'protect change of category after appointment is added
+    End If
+    
+
+End Sub
+

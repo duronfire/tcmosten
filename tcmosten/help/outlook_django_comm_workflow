@@ -15,6 +15,7 @@ Specifications:
 6. Fault by adding/changing/deleting must be protocolled on local disk 
 7. Patient Contact must be sychronized with SQL Table "Patient". Difference must be protocolled on location same as Fault-Protocol.
 8. Patient appointment must be sychronized with SQL Table "Sitzung". Difference must be protocolled on location same as Fault-Protocol.
+9. Lock Outlook by synchronization
 
 
 
@@ -84,7 +85,7 @@ Delete:
 
 
 
-Asynchronized Workflow Ol:
+Asynchronized Workflow Appointment Item:
 
 Add:
 1. Select Calendar date time and write Label "p:" with complete name or part of name --> UserForm UserForm Select/find/new --> 
@@ -98,9 +99,49 @@ change:
     2). If Only Date Time changes --> Save and Reset Sync-Label to false  
 
 Logically Delete (physically move to):
-1. Delete (move to) appointment --> Check Patient-Label, Only if with Patient-Label --> catch appointment entryid by event beforemoveto --> set Sync-Label to false  
+1. Delete (move to) appointment --> Check Patient-Label, Only if with Patient-Label --> catch appointment entryid by event beforemoveto --> set item state to ondelete --> after sync set item state to deleted
  
+Asynchronized Workflow Kontakt Item:
+Add:
+1. User create new patient and choose yes for confirming new patient. Patient become patient_label,last_sync, start_sync, sync_state, sync_run, item_state Labels.
+
+change:
+1. If patient_label is not nothing and if syncrun is "idle" and if Datediff(last_sync, now) <1 then, item state ="changed" 
+2. If sync_run is run and start_sync started more than xxx seconds before --> timeout error for sync --> write item state changed_aft_error --> write sync_run  
+Logically Delete (physically move to):
+1. Delete (move to) appointment --> Check Patient-Label, Only if with Patient-Label --> catch appointment entryid by event beforemoveto --> set delete-Label to true  
+ 
+
+
 Synchronization workflow Ol-Django:
 1. Client send GET local Ol-Info to Django (per Ol/Browser) --> Django send GET Sync-Request to local python Http-Server --> local python Http-Server call python sychronization function --> retrieve all Ol-Items with ".restrict(Sync-Label = false)" --> local Http-Server POST retrieved info to Django-Server --> Django synchronize SQL Database --> send GET "OK" to local Http-Server --> call python function to set Sync-Label to True on all retrieved items --> send GET "Commit changes" 
 2. Admin-Client send GET ALL Ol-Info to Django (per Browser) --> Django send GET Sync-Request to all local python Http-Servers --> local python Http-Server call python synchronization function --> retrieve all Ol-Items with ".restrict(Sync-Label = false)" --> local Http-Servers POST retrieved info to Django-Server --> Django synchronize SQL Database --> send GET "OK" to local Http-Server --> call python function to set Sync-Label to True on all retrieved items --> send GET "Commit changes" 
 !!!!protocol synchronization in every step!!!!
+
+Sync State:
+ 'Ol: wait,gotsignal,restricted,gotform,gotsqlupdated,saved; Django on sync protocol table ordered by sync start time, status:gotsignal,gotrestricted,gotformrequest,gotpost,sqlupdated,done
+
+Sync run:
+"idle", "run", "error"
+
+Item state:
+"onlocal", "changed", "changed_aft_error", "onserver"
+
+local                                                               Server
+                --> GET Request to sync link on Server -->
+                <-- Response "Sync proc start" <--
+
+                <-- GET Request to sync link on local python HTTPServer <--
+Run Restrict    --> Response after restricted -->
+
+                --> Request form -->
+                <-- Response form <--
+                --> POST Request form -->                       SQL Update
+Label,Save      <-- Response  SQL Updated <--
+                --> GET Request final-->                        stamp last sync
+                          
+Label_Patient: "created""new","old","newold"
+
+Default Value of oltext, olyesno, oldatetime: "", #01/01/4501#, False
+
+
