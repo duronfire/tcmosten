@@ -9,25 +9,22 @@ Public Const uprop_ISYS = "ISYS"
 'ol read only:
 Public Const uprop_lastsync = "lastsync"
 Public Const uprop_startsync = "startsync"
-Public Const uprop_bill = "bill" 'nobill, open, settled 
-Public Const uprop_billpid = "billpid" 'nopid, 1 to xxxxx bill pid in sql
-Public Const uprop_lastbill = "lastbill" 'last timestamp of open bill
-Public Const uprop_archievrun = "archievrun" 'idle, run, for permission archiev ap  
-Public Const uprop_syncrun = "syncrun" 'idle, run, for permission save changes
-Public Const uprop_syncstate = "syncstate" 'wait, 
-Public Const uprop_itemstate = "itemstate"
+Public Const uprop_bill = "bill" 'nobill, open, settled,  ap only prop  
+Public Const uprop_billpid = "billpid" 'nopid, 1 to xxxxx bill pid in sql,  ap only prop  
+Public Const uprop_lastbill = "lastbill" 'last timestamp of open bill,  ap only prop  
+Public Const uprop_archievrun = "archievrun" 'idle, run, error for permission archiev ap,  ap only prop  
+Public Const uprop_syncrun = "syncrun" 'idle, run, error,  for permission save changes
+Public Const uprop_syncstate = "syncstate" 'wait,gotsignal,restricted,gotform,gotsqlupdated,saved
 
+'ol sql interact:
+Public Const uprop_itemstate = "itemstate" 'created, changed, changed_aft_error, onserver for identify change states, interact with start/last sync stamp
 
-Public Const uprop_patientlabel = "patientlabel" 
-
-
-
-
-
+'sql read only:
+Public Const uprop_patientlabel = "patientlabel" 'created,new,old,newold, ct only prop
 Public Const uprop_patient_entryid = "pentryid"
 Public Const uprop_therapeut_fullname = "tpfullname"
 Public Const uprop_therapeut_pid = "tppid"
-Public Const uprop_apcategory = "apcategory"
+Public Const uprop_presence = "presence" 'confirmed, canceled, notreatment
 
 
 
