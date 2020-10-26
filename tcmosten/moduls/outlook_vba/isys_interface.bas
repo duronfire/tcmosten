@@ -21,10 +21,11 @@ Public Const uprop_itemstate = "itemstate" 'created, changed, changed_aft_error,
 
 'sql read only:
 Public Const uprop_patientlabel = "patientlabel" 'created,new,old,newold, ct only prop
+Public Const uprop_aplabel = "aplabel" 'kickoff,followup,  ap only prop
 Public Const uprop_patient_entryid = "pentryid" ' ap only prop
 Public Const uprop_therapeut_fullname = "tpfullname" ' ap only prop
 Public Const uprop_therapeut_pid = "tppid" ' ap only prop
-Public Const uprop_apcategory = "apcategory" 'present, absent, canceled, notreatment
+Public Const uprop_apcategory = "apcategory" 'present, absent, canceled, notreatment , ap only prop
 
 
 
