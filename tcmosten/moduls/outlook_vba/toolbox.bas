@@ -104,7 +104,7 @@ Public Function patient_matcher(rp)
         Set ct = rp.AddressEntry.GetContact
         If Not ct Is Nothing Then
             Set p_label = ct.UserProperties.Find(isys_interface.uprop_patientlabel)
-            If Not p_label Is Nothing Then
+            If p_label <> "NA" Then
                 patient_matcher = True
                 MsgBox ct.LastName + ct.FirstName
             End If
@@ -112,3 +112,69 @@ Public Function patient_matcher(rp)
     End If
 
 End Function
+
+Public Sub init_aplabels(item As Object, ap_type As Boolean)
+    Set last_sync = Item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
+    Set start_sync = Item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
+    Set bill_state = Item.UserProperties.Add(isys_interface.uprop_billstate, olText)
+    Set bill_pid = Item.UserProperties.Add(isys_interface.uprop_billpid, olText)
+    Set last_bill = Item.UserProperties.Add(isys_interface.uprop_lastbill, olDateTime, olFormatDateTimeShortDateTime)
+    Set archiev_run = Item.UserProperties.Add(isys_interface.uprop_archievrun, olText)
+    Set sync_run = Item.UserProperties.Add(isys_interface.uprop_syncrun, olText)
+    Set sync_state = Item.UserProperties.Add(isys_interface.uprop_syncstate, olText)
+
+    Set item_state = Item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
+
+    Set ap_label = Item.UserProperties.Add(isys_interface.uprop_aplabel, olText)
+    Set p_entryid = Item.UserProperties.Add(isys_interface.uprop_patient_entryid, olText)
+    Set tp_fullname = Item.UserProperties.Add(isys_interface.uprop_therapeut_fullname, olText)
+    Set tp_pid = Item.UserProperties.Add(isys_interface.uprop_therapeut_pid, olText)
+    Set ap_category = Item.UserProperties.Add(isys_interface.uprop_apcategory, olText)
+
+    if ap_type = True Then
+        bill_state.Value = "nobill"
+        bill_pid.Value = "nopid"
+        archiev_run.Value = "idle"
+        sync_run.Value = "idle"
+        sync_state.Value = "wait"
+
+        item_state.Value = "created"
+
+
+        Set res = Application.GetNamespace("MAPI").GetDefaultFolder(1).Items.Restrict("[p_entryid]='" & eid & "'")
+        if res.Count = 0 then
+            ap_label.value = "kickoff" 
+        ElseIf res.Count > 0 then
+            ap_label.value = "followup" 
+        End if
+
+        p_entryid.Value = item.Recipients.Item(2).getadressentry.getcontact.getentryid
+        tp_fullname.Value = "" ' in work
+        tp_pid.Value = "" ' in work
+        ap_category.Value  = "present" ' in work pre-set category in Isys and read value and map to defined value
+
+    else 
+        bill_state.Value = "NA"
+        bill_pid.Value = "NA"
+        archiev_run.Value = "NA"
+        sync_run.Value = "NA"
+        sync_state.Value = "NA"
+
+        item_state.Value = "NA"
+
+
+        ap_label.value = "NA" 
+
+
+        p_entryid.Value = "NA"
+        tp_fullname.Value = "NA" ' in work
+        tp_pid.Value = "NA" ' in work
+        ap_category.Value  = "NA" ' in work pre-set category in Isys and read value and map to defined value
+    
+    End If
+
+
+
+
+
+End Sub

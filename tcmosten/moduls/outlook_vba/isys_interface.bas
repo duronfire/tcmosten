@@ -9,8 +9,8 @@ Public Const uprop_ISYS = "ISYS"
 'ol read only:
 Public Const uprop_lastsync = "lastsync"
 Public Const uprop_startsync = "startsync"
-Public Const uprop_bill = "bill" 'nobill, open, settled,  ap only prop  
-Public Const uprop_billpid = "billpid" 'nopid, 1 to xxxxx bill pid in sql,  ap only prop  
+Public Const uprop_billstate = "billstate" 'nobill, open, settled,  ap only prop  
+Public Const uprop_billpid = "billpid" '-1 = nopid, 1 to xxxxx bill pid in sql,  ap only prop  
 Public Const uprop_lastbill = "lastbill" 'last timestamp of open bill,  ap only prop  
 Public Const uprop_archievrun = "archievrun" 'idle, run, error for permission archiev ap,  ap only prop  
 Public Const uprop_syncrun = "syncrun" 'idle, run, error,  for permission save changes
@@ -25,7 +25,7 @@ Public Const uprop_aplabel = "aplabel" 'kickoff,followup,  ap only prop
 Public Const uprop_patient_entryid = "pentryid" ' ap only prop
 Public Const uprop_therapeut_fullname = "tpfullname" ' ap only prop
 Public Const uprop_therapeut_pid = "tppid" ' ap only prop
-Public Const uprop_apcategory = "apcategory" 'present, absent, canceled, notreatment , ap only prop
+Public Const uprop_apcategory = "apcategory" 'present, absent, canceled, notreatment according to category value, ap only prop
 
 
 

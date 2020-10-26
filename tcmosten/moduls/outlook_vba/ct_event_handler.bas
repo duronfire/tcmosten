@@ -4,21 +4,37 @@ Public patient_or_contact As Boolean
 
 
 Public Sub add_CT(Item As Object)
-    Set p_label = Item.UserProperties.Add(isys_interface.uprop_patientlabel, olText)
+
+
     form_addpatient.Show
+    Set last_sync = Item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
+    Set start_sync = Item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
+    Set sync_run = Item.UserProperties.Add(isys_interface.uprop_syncrun, olText)
+    Set sync_state = Item.UserProperties.Add(isys_interface.uprop_syncstate, olText)
+
+    Set item_state = Item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
+
+    Set p_label = Item.UserProperties.Add(isys_interface.uprop_patientlabel, olText)
+
+
+
+
+
+    
     If patient_or_contact Then
-        Set last_sync = Item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
-        Set sync_state = Item.UserProperties.Add(isys_interface.uprop_syncstate, olText)
-        Set sync_run = Item.UserProperties.Add(isys_interface.uprop_syncrun, olText)
-        Set item_state = Item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
-        Set start_sync = Item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
-        p_label.Value = "created"
-        sync_state.Value = "wait"
         sync_run.Value = "idle"
-        item_state.Value = "onlocal"
+        sync_state.Value = "wait"
+
+        item_state.Value = "created"    
+        p_label.Value = "created"
+
         Item.Email3Address = Item.FirstName & "." & Item.LastName & "@dummy.dummy"
     Else
-        p_label.Value = "nonpatient"
+        sync_run.Value = "NA"
+        sync_state.Value = "NA"
+
+        item_state.Value = "NA"    
+        p_label.Value = "NA"
     End If
     
     Item.Save
@@ -27,7 +43,7 @@ End Sub
 
 Public Sub change_CT(Item As Object)
 
-    If Not Item.UserProperties.Find(isys_interface.uprop_patientlabel) Is Nothing Then
+    If Item.UserProperties.Find(isys_interface.uprop_patientlabel) <> "NA" Then
         If Item.UserProperties.Find(isys_interface.uprop_syncrun).Value = "idle" And DateDiff("s", Item.UserProperties.Find(isys_interface.uprop_lastsync).Value, DateTime.Now) > 1 Then
             Item.UserProperties.Find(isys_interface.uprop_itemstate).Value = "changed"
             MsgBox "Patientdaten geändert!"
@@ -43,10 +59,10 @@ End Sub
 
 Public Sub delete_CT(Item As Object, Cancel As Boolean)
     Set p_label = Item.UserProperties.Find(isys_interface.uprop_patientlabel)
-    If Not p_label Is Nothing Then
-        If Not p_label = "created" Then
-            Cancel = True
-            MsgBox "Achtung: Löschen dieses Patients ist nicht gestattet, weil ihm noch Termine gehören!", vbExclamation
-        End If
+
+    If Not p_label = "created" Then
+        Cancel = True
+        MsgBox "Achtung: Löschen dieses Patients ist nicht gestattet, weil ihm noch Termine gehören!", vbExclamation
     End If
+
 End Sub
