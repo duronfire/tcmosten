@@ -54,8 +54,8 @@ Public Sub add_AP(Item As Object)
         End If
     End If
     
-
-    init_aplabels Item,ap_type
+    ct_item = 'in work
+    init_aplabels Item,ap_type,ct_item
 
                 
             
