@@ -113,7 +113,7 @@ Public Function patient_matcher(rp)
 
 End Function
 
-Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, ct_item As Object)
+Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item,tp_ct_item As Object)
     Set last_sync = ap_item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
     Set start_sync = ap_item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
     Set bill_state = ap_item.UserProperties.Add(isys_interface.uprop_billstate, olText)
@@ -141,16 +141,17 @@ Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, ct_item As Objec
         item_state.Value = "created"
 
 
-        Set res = Application.GetNamespace("MAPI").GetDefaultFolder(1).Items.Restrict("[p_entryid]='" & eid & "'")
+        peid = p_ct_item.EntryID
+        Set res = Application.GetNamespace("MAPI").GetDefaultFolder(9).Items.Restrict("[" & isys_interface.uprop_patient_entryid & "]='" & peid & "'")
         if res.Count = 0 then
             ap_label.value = "kickoff" 
         ElseIf res.Count > 0 then
             ap_label.value = "followup" 
         End if
-
-        p_entryid.Value = ct_item.EntryID
-        tp_fullname.Value = "" ' in work
-        tp_pid.Value = "" ' in work
+        p_entryid.Value = peid
+        
+        tp_fullname.Value = tp_ct_item.LastName & "_" & tp_ct_item.FirstName 
+        tp_pid.Value = tp_ct_item.UserProperties.Find(isys_interface.uprop_therapeut_pid).Value
         ap_category.Value  = "present" ' in work pre-set category in Isys and read value and map to defined value
 
     else 
