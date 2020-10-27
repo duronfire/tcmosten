@@ -15,6 +15,7 @@ Public Const uprop_lastbill = "lastbill" 'last timestamp of open bill,  ap only 
 Public Const uprop_archievrun = "archievrun" 'idle, run, error for permission archiev ap,  ap only prop  
 Public Const uprop_syncrun = "syncrun" 'idle, run, error,  for permission save changes
 Public Const uprop_syncstate = "syncstate" 'wait,gotsignal,restricted,gotform,gotsqlupdated,saved
+Public Const uprop_therapeut_pid = "tppid" ' therapeut has own table, ap only prop
 
 'ol sql interact:
 Public Const uprop_itemstate = "itemstate" 'created, changed, changed_aft_error, onserver for identify change states, interact with start/last sync stamp
@@ -24,7 +25,6 @@ Public Const uprop_patientlabel = "patientlabel" 'created,new,old,newold, ct onl
 Public Const uprop_aplabel = "aplabel" 'kickoff,followup,  ap only prop
 Public Const uprop_patient_entryid = "pentryid" ' ap only prop
 Public Const uprop_therapeut_fullname = "tpfullname" ' ap only prop
-Public Const uprop_therapeut_pid = "tppid" ' ap only prop
 Public Const uprop_apcategory = "apcategory" 'present, absent, canceled, notreatment according to category value, ap only prop
 
 
@@ -166,6 +166,7 @@ Public Sub set_userproperties(APFolder As folder, CTFolder As folder)
         APFolder.UserDefinedProperties.Add uprop_therapeut_pid, olText 'protect change of therapeut after appointment is added
 
         APFolder.UserDefinedProperties.Add uprop_apcategory, olText 'protect change of category after appointment is added
+
     End If
     
 
