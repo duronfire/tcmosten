@@ -113,23 +113,23 @@ Public Function patient_matcher(rp)
 
 End Function
 
-Public Sub init_aplabels(item As Object, ap_type As Boolean)
-    Set last_sync = Item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
-    Set start_sync = Item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
-    Set bill_state = Item.UserProperties.Add(isys_interface.uprop_billstate, olText)
-    Set bill_pid = Item.UserProperties.Add(isys_interface.uprop_billpid, olText)
-    Set last_bill = Item.UserProperties.Add(isys_interface.uprop_lastbill, olDateTime, olFormatDateTimeShortDateTime)
-    Set archiev_run = Item.UserProperties.Add(isys_interface.uprop_archievrun, olText)
-    Set sync_run = Item.UserProperties.Add(isys_interface.uprop_syncrun, olText)
-    Set sync_state = Item.UserProperties.Add(isys_interface.uprop_syncstate, olText)
+Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, ct_item As Object)
+    Set last_sync = ap_item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
+    Set start_sync = ap_item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
+    Set bill_state = ap_item.UserProperties.Add(isys_interface.uprop_billstate, olText)
+    Set bill_pid = ap_item.UserProperties.Add(isys_interface.uprop_billpid, olText)
+    Set last_bill = ap_item.UserProperties.Add(isys_interface.uprop_lastbill, olDateTime, olFormatDateTimeShortDateTime)
+    Set archiev_run = ap_item.UserProperties.Add(isys_interface.uprop_archievrun, olText)
+    Set sync_run = ap_item.UserProperties.Add(isys_interface.uprop_syncrun, olText)
+    Set sync_state = ap_item.UserProperties.Add(isys_interface.uprop_syncstate, olText)
 
-    Set item_state = Item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
+    Set item_state = ap_item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
 
-    Set ap_label = Item.UserProperties.Add(isys_interface.uprop_aplabel, olText)
-    Set p_entryid = Item.UserProperties.Add(isys_interface.uprop_patient_entryid, olText)
-    Set tp_fullname = Item.UserProperties.Add(isys_interface.uprop_therapeut_fullname, olText)
-    Set tp_pid = Item.UserProperties.Add(isys_interface.uprop_therapeut_pid, olText)
-    Set ap_category = Item.UserProperties.Add(isys_interface.uprop_apcategory, olText)
+    Set ap_label = ap_item.UserProperties.Add(isys_interface.uprop_aplabel, olText)
+    Set p_entryid = ap_item.UserProperties.Add(isys_interface.uprop_patient_entryid, olText)
+    Set tp_fullname = ap_item.UserProperties.Add(isys_interface.uprop_therapeut_fullname, olText)
+    Set tp_pid = ap_item.UserProperties.Add(isys_interface.uprop_therapeut_pid, olText)
+    Set ap_category = ap_item.UserProperties.Add(isys_interface.uprop_apcategory, olText)
 
     if ap_type = True Then
         bill_state.Value = "nobill"
@@ -148,7 +148,7 @@ Public Sub init_aplabels(item As Object, ap_type As Boolean)
             ap_label.value = "followup" 
         End if
 
-        p_entryid.Value = item.Recipients.Item(2).getadressentry.getcontact.getentryid
+        p_entryid.Value = ct_item.EntryID
         tp_fullname.Value = "" ' in work
         tp_pid.Value = "" ' in work
         ap_category.Value  = "present" ' in work pre-set category in Isys and read value and map to defined value
@@ -161,7 +161,6 @@ Public Sub init_aplabels(item As Object, ap_type As Boolean)
         sync_state.Value = "NA"
 
         item_state.Value = "NA"
-
 
         ap_label.value = "NA" 
 
