@@ -13,7 +13,6 @@ Public Sub add_CT(Item As Object)
     Set p_state = Item.UserProperties.Add(isys_interface.UPROP_PATIENTSTATE, olText)
  
  
- 
     
     If IS_PATIENT Then
         sync_run.Value = "idle"
@@ -40,22 +39,24 @@ Public Sub change_CT(Item As Object)
         If Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "idle" Then
             if DateDiff("s", Item.UserProperties.Find(isys_interface.UPROP_LASTSYNC).Value, DateTime.Now) > 1 Then 
                 Item.UserProperties.Find(isys_interface.UPROP_ITEMSTATE).Value = "changed"
-                MsgBox "Patientdaten geändert und in Outlook gespeichert!"
+                MsgBox "Patientendaten geändert und in Outlook gespeichert!"
             End If
         'if changed by human?
         Elseif Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "run" then 
             If DateDiff("s", Item.UserProperties.Find(isys_interface.UPROP_STARTSYNC).Value, DateTime.Now) > MAX_SYNC_TIMEOUT Then
                 Item.UserProperties.Find(isys_interface.UPROP_ITEMSTATE).Value = "changed_aft_timeout"
                 Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "error"
-                MsgBox "Patientdaten geändert und in Outlook gespeichert!" + vbNewLine + "Die letzte Synchronisierung hat nicht erfolgreich abgeschlossen. Diese Änderung könnte ggf. nicht auf ISYS synchronisiert werden. Funktionen in Outlook werden allerdings nicht beeinträchtigt."
+                MsgBox "Patientendaten geändert und in Outlook gespeichert!" + vbNewLine + "Die letzte Synchronisierung hat nicht erfolgreich abgeschlossen. Diese Änderung könnte ggf. nicht auf ISYS synchronisiert werden. Funktionen in Outlook werden allerdings nicht beeinträchtigt."
                 MsgBox "Achtung: ISYS Datenbank ist nicht mehr aktuell! Informieren Sie bitte Administrator", vbExclamation
             End If
         Else 
                 Item.UserProperties.Find(isys_interface.UPROP_ITEMSTATE).Value = "changed_aft_error"
-                MsgBox "Patientdaten geändert und in Outlook gespeichert!" & vbNewLine & "Achtung: Die letzten Synchronisierungen waren fehlerhaft! Informieren Sie bitte Administrator", vbExclamation
+                MsgBox "Patientendaten geändert und in Outlook gespeichert!" & vbNewLine & "Achtung: Die letzten Synchronisierungen waren fehlerhaft! Informieren Sie bitte Administrator", vbExclamation
         End If
     End If
-    
+
+    'check therapeut full name
+    if Item.UserProperties.Find(isys_interface.UPROP_TPFULLNAME).Value <> (Item.Recipients.Item(3).AddressEntry.GetContact.LastName & "_" & Item.Recipients.Item(3).AddressEntry.GetContact.FirstName)
 End Sub
 Public Sub delete_CT(Item As Object, Cancel As Boolean)
  

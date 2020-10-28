@@ -99,6 +99,7 @@ Public Function patient_matcher(rp)
         End If
     End If
 End Function
+
 Public Sub init_APLABELs(ap_item As Object, ap_type As Boolean, p_ct_item As Object, tp_ct_item As Object)
     Set last_sync = ap_item.UserProperties.Add(isys_interface.UPROP_LASTSYNC, olDateTime, olFormatDateTimeShortDateTime)
     Set start_sync = ap_item.UserProperties.Add(isys_interface.UPROP_STARTSYNC, olDateTime, olFormatDateTimeShortDateTime)
@@ -142,8 +143,8 @@ Public Sub init_APLABELs(ap_item As Object, ap_type As Boolean, p_ct_item As Obj
         End If
         p_entryid.Value = peid
         
-        tp_fullname.Value = tp_ct_item.LastName & "_" & tp_ct_item.FirstName
-        tp_pid.Value = tp_ct_item.UserProperties.Find(isys_interface.UPROP_TPPID).Value
+        tp_fullname.Value = tp_ct_item.UserProperties.Find("tpfullname").Value
+        tp_pid.Value = tp_ct_item.UserProperties.Find("tppid").Value 'lastname_vorname
         ap_category.Value = isys_interface.CATEGORY_STRS(0)
         ap_item.Categories = isys_interface.CATEGORY_STRS(0)
  

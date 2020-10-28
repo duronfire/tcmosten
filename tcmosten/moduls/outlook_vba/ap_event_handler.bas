@@ -60,12 +60,40 @@ Public Sub add_AP(Item As Object)
 End Sub
  
 Public Sub change_AP(Item As Object)
-    'is patient appointment?
+    'if a patient or therapeut
     If Item.UserProperties.Find(isys_interface.UPROP_APLABEL) <> "NA" Then
-        'is changed by programm?
-        If Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "idle" And DateDiff("s", Item.UserProperties.Find(isys_interface.UPROP_LASTSYNC).Value, DateTime.Now) > 1 Then
-    
-    
+        'if changed by human?
+        If Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "idle" Then
+            if DateDiff("s", Item.UserProperties.Find(isys_interface.UPROP_LASTSYNC).Value, DateTime.Now) > 1 Then 
+                Item.UserProperties.Find(isys_interface.UPROP_ITEMSTATE).Value = "changed"
+                MsgBox "Patientendaten geändert und in Outlook gespeichert!"
+            End If
+        'if changed by human?
+        Elseif Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "run" then 
+            If DateDiff("s", Item.UserProperties.Find(isys_interface.UPROP_STARTSYNC).Value, DateTime.Now) > MAX_SYNC_TIMEOUT Then
+                Item.UserProperties.Find(isys_interface.UPROP_ITEMSTATE).Value = "changed_aft_timeout"
+                Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "error"
+                MsgBox "Patientendaten geändert und in Outlook gespeichert!" + vbNewLine + "Die letzte Synchronisierung hat nicht erfolgreich abgeschlossen. Diese Änderung könnte ggf. nicht auf ISYS synchronisiert werden. Funktionen in Outlook werden allerdings nicht beeinträchtigt."
+                MsgBox "Achtung: ISYS Datenbank ist nicht mehr aktuell! Informieren Sie bitte Administrator", vbExclamation
+            End If
+        Else 
+                Item.UserProperties.Find(isys_interface.UPROP_ITEMSTATE).Value = "changed_aft_error"
+                MsgBox "Patientendaten geändert und in Outlook gespeichert!" & vbNewLine & "Achtung: Die letzten Synchronisierungen waren fehlerhaft! Informieren Sie bitte Administrator", vbExclamation
+        End If
+    End If
+
+    'check unpermitted changes
+    If Item.Recipients.Count = 3 Then 
+        'resources name match therapeut name
+        if Item.Resources.
+        'patient eid match patienteid in userproperties
+        if Item.UserProperties.Find(isys_interface.UPROP_PTEID).Value <> Item.Recipients.Item(2).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_PTEID).Value
+
+        'check therapeut in recipients
+        if Item.UserProperties.Find(isys_interface.UPROP_TPPID).Value <> Item.Recipients.Item(3).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_TPPID).Value
+    Else
+        'set back
+
 End sub
  
 
