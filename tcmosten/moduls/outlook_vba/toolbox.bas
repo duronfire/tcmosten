@@ -100,13 +100,8 @@ Public Function patient_matcher(rp)
     End If
  
 End Function
-<<<<<<< HEAD
  
 Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item, tp_ct_item As Object)
-=======
-
-Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item,tp_ct_item As Object)
->>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
     Set last_sync = ap_item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
     Set start_sync = ap_item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
     Set bill_state = ap_item.UserProperties.Add(isys_interface.uprop_billstate, olText)
@@ -115,27 +110,16 @@ Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item,tp_ct_
     Set archiev_run = ap_item.UserProperties.Add(isys_interface.uprop_archievrun, olText)
     Set sync_run = ap_item.UserProperties.Add(isys_interface.uprop_syncrun, olText)
     Set sync_state = ap_item.UserProperties.Add(isys_interface.uprop_syncstate, olText)
-<<<<<<< HEAD
  
     Set item_state = ap_item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
  
-=======
-
-    Set item_state = ap_item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
-
->>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
     Set ap_label = ap_item.UserProperties.Add(isys_interface.uprop_aplabel, olText)
     Set p_entryid = ap_item.UserProperties.Add(isys_interface.uprop_patient_entryid, olText)
     Set tp_fullname = ap_item.UserProperties.Add(isys_interface.uprop_therapeut_fullname, olText)
     Set tp_pid = ap_item.UserProperties.Add(isys_interface.uprop_therapeut_pid, olText)
     Set ap_category = ap_item.UserProperties.Add(isys_interface.uprop_apcategory, olText)
-<<<<<<< HEAD
  
     If ap_type = True Then
-=======
-
-    if ap_type = True Then
->>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
         bill_state.Value = "nobill"
         bill_pid.Value = "nopid"
         archiev_run.Value = "idle"
@@ -143,7 +127,6 @@ Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item,tp_ct_
         sync_state.Value = "wait"
  
         item_state.Value = "created"
-<<<<<<< HEAD
  
  
         peid = p_ct_item.EntryID
@@ -169,24 +152,6 @@ Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item,tp_ct_
  
         ap_item.Categories = isys_interface.cate_strs(0)
     Else
-=======
-
-
-        peid = p_ct_item.EntryID
-        Set res = Application.GetNamespace("MAPI").GetDefaultFolder(9).Items.Restrict("[" & isys_interface.uprop_patient_entryid & "]='" & peid & "'")
-        if res.Count = 0 then
-            ap_label.value = "kickoff" 
-        ElseIf res.Count > 0 then
-            ap_label.value = "followup" 
-        End if
-        p_entryid.Value = peid
-        
-        tp_fullname.Value = tp_ct_item.LastName & "_" & tp_ct_item.FirstName 
-        tp_pid.Value = tp_ct_item.UserProperties.Find(isys_interface.uprop_therapeut_pid).Value
-        ap_category.Value  = "present" ' in work pre-set category in Isys and read value and map to defined value
-
-    else 
->>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
         bill_state.Value = "NA"
         bill_pid.Value = "NA"
         archiev_run.Value = "NA"
@@ -194,17 +159,10 @@ Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item,tp_ct_
         sync_state.Value = "NA"
  
         item_state.Value = "NA"
-<<<<<<< HEAD
  
         ap_label.Value = "NA"
  
  
-=======
-
-        ap_label.value = "NA" 
-
-
->>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
         p_entryid.Value = "NA"
         tp_fullname.Value = "NA"
         tp_pid.Value = "NA"

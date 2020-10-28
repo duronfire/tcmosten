@@ -186,11 +186,7 @@ Public Sub set_userproperties(APFolder As folder, CTFolder As folder)
         APFolder.UserDefinedProperties.Add uprop_therapeut_pid, olText 'protect change of therapeut after appointment is added
  
         APFolder.UserDefinedProperties.Add uprop_apcategory, olText 'protect change of category after appointment is added
-<<<<<<< HEAD
  
-=======
-
->>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
     End If
     
  
