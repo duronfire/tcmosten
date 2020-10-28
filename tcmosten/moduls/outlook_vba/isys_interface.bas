@@ -16,11 +16,7 @@ Public Const uprop_archievrun = "archievrun" 'idle, run, error for permission ar
 Public Const uprop_syncrun = "syncrun" 'idle, run, error,  for permission save changes
 Public Const uprop_syncstate = "syncstate" 'wait,gotsignal,restricted,gotform,gotsqlupdated,saved
 Public Const uprop_therapeut_pid = "tppid" ' therapeut has own table, ap only prop
-<<<<<<< HEAD
  
-=======
-
->>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
 'ol sql interact:
 Public Const uprop_itemstate = "itemstate" 'created, changed, changed_aft_error, onserver for identify change states, interact with start/last sync stamp
 Public Const uprop_ptlabel = "ptlabel" 'patient,therapeut, ct only prop, patient label from ol and therapeut label from sql
@@ -34,8 +30,13 @@ Public Const uprop_apcategory = "apcategory" 'present, absent, canceled, notreat
  
  
 'ol categories:
-Public cate_strs
-Public cate_colors
+Public cate_strs As Variant
+
+Public cate_colors As Variant
+
+
+
+
 
 Public tp_items
 
@@ -70,8 +71,9 @@ Public Sub init()
     Set winHttp = CreateObject("WinHttp.WinHttpRequest.5.1")
     Set workSheet = CreateObject("Excel.Application").WorksheetFunction
 
-    Set cate_strs = Array("present", "absent", "canceled", "notreatment", "sick") 'all category item names
-    Set cate_colors = Array(olCategoryColorGreen, olCategoryColorRed, olCategoryColorOrange, olCategoryColorYellow, olCategoryColorBlue)
+    cate_strs = Array("present", "absent", "canceled", "notreatment", "sick") 'all category item names
+    cate_colors = Array(olCategoryColorGreen, olCategoryColorRed, olCategoryColorOrange, olCategoryColorYellow, olCategoryColorBlue)
+
     
     get_sync
 End Sub
