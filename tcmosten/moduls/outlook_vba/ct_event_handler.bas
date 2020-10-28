@@ -60,8 +60,9 @@ Public Sub change_CT(Item As Object)
 End Sub
 Public Sub delete_CT(Item As Object, Cancel As Boolean)
  
-    Set p_state = Item.UserProperties.Find(isys_interface.UPROP_PATIENTSTATE)
-    If Not p_state = "created" OR not p_state = "NA" Then
+    Set p_state = Item.UserProperties.Find(isys_interface.UPROP_PATIENTSTATE).Value
+    Set pt_label = Item.UserProperties.Find(isys_interface.UPROP_PTLABEL).Value
+    If Not p_state = "created" OR not pt_label = "NA" Then
         Cancel = True
         MsgBox "Achtung: Löschen dieses Patients ist nicht gestattet, weil ihm noch Termine gehören!", vbExclamation
     End If

@@ -60,6 +60,7 @@ Public Sub add_AP(Item As Object)
 End Sub
  
 Public Sub change_AP(Item As Object)
+
     'if a patient or therapeut
     If Item.UserProperties.Find(isys_interface.UPROP_APLABEL) <> "NA" Then
         'if changed by human?
@@ -85,15 +86,21 @@ Public Sub change_AP(Item As Object)
     'check unpermitted changes
     If Item.Recipients.Count = 3 Then 
         'resources name match therapeut name
-        if Item.Resources.
+        if Item.recipients.Item(2).Resolved
+        if Item.recipients.Item(3).Resolved
         'patient eid match patienteid in userproperties
         if Item.UserProperties.Find(isys_interface.UPROP_PTEID).Value <> Item.Recipients.Item(2).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_PTEID).Value
 
-        'check therapeut in recipients
+        'check therapeut pid in recipients
         if Item.UserProperties.Find(isys_interface.UPROP_TPPID).Value <> Item.Recipients.Item(3).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_TPPID).Value
     Else
-        'set back
+        'set back therapeut per pid
+        'set back patient per eid
+        'set back subject
+    End if
 
+
+    'set apcategory value read from app - TODO
 End sub
  
 
