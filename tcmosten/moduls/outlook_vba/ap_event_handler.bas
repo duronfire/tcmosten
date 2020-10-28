@@ -57,11 +57,21 @@ Public Sub add_AP(Item As Object)
         End If
     End If
     
+<<<<<<< HEAD
     ct_item = sel_patient_item
     If patient_meeting Then
         init_aplabels Item, patient_meeting, ct_item
     End If
  
+=======
+    ct_item = 'in work
+    init_aplabels Item,ap_type,ct_item
+
+                
+            
+        
+    
+>>>>>>> dff281abd7062ec749537a5ebcb985ac9a5c0d7e
     
 End Sub
 
