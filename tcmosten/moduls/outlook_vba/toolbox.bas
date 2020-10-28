@@ -1,9 +1,11 @@
-Public results_items() As Object
-
-
+ 
+Public RESULTS_ITEMS() As Object
+ 
+ 
 Public Sub patient_parser(search_str)
     
-    p_filter = "[" & isys_interface.uprop_pntlabel & "] = 'patient'"
+ 
+    p_filter = "[" & isys_interface.UPROP_pntlabel & "] = 'patient'"
     Set p_res = Application.GetNamespace("MAPI").GetDefaultFolder(10).Items.Restrict(p_filter) 'restrict and find works only with =  or >  or < not work with <>
     'https://docs.microsoft.com/de-de/office/client-developer/outlook/mapi/commonly-used-property-sets
                   
@@ -24,8 +26,8 @@ Public Sub patient_parser(search_str)
             For Each item_sn In subname0_res_sn
                 For Each item_gn In subname1_res_gn
                     If item_sn.EntryID = item_gn.EntryID Then
-                        ReDim Preserve results_items(i) As Object
-                        Set results_items(i) = item_gn
+                        ReDim Preserve RESULTS_ITEMS(i) As Object
+                        Set RESULTS_ITEMS(i) = item_gn
                         i = i + 1
                     End If
                 Next
@@ -45,8 +47,8 @@ Public Sub patient_parser(search_str)
                 For Each item_sn In subname1_res_sn
                     For Each item_gn In subname0_res_gn
                         If item_sn.EntryID = item_gn.EntryID Then
-                            ReDim Preserve results_items(i) As Object
-                            Set results_items(i) = item_gn
+                            ReDim Preserve RESULTS_ITEMS(i) As Object
+                            Set RESULTS_ITEMS(i) = item_gn
                             i = i + 1
                         End If
                     Next
@@ -54,7 +56,7 @@ Public Sub patient_parser(search_str)
             End If
         End If
         
-
+ 
             
         
     ElseIf UBound(subnames) = 0 Then
@@ -65,18 +67,18 @@ Public Sub patient_parser(search_str)
         blockname_filter_gn = "@SQL=" & Chr(34) & "urn:schemas:contacts:givenName" & Chr(34) & " like '%" & search_str & "%'" 'block name could be only "a"
         Set blockname_res_gn = p_res.Restrict(blockname_filter_gn)
     
-
+ 
         If blockname_res_sn.Count > 0 Then
             For i = 1 To UBound(blockname_res_sn)
-                ReDim Preserve results_items(i - 1) As Object
-                Set results_items(i - 1) = blockname_res_sn.Item(i)
+                ReDim Preserve RESULTS_ITEMS(i - 1) As Object
+                Set RESULTS_ITEMS(i - 1) = blockname_res_sn.Item(i)
             Next i
         End If
         
         If blockname_res_gn.Count > 0 Then
             For i = 1 To UBound(blockname_res_gn)
-                ReDim Preserve results_items(i - 1) As Object
-                Set results_items(i - 1) = blockname_res_gn.Item(i)
+                ReDim Preserve RESULTS_ITEMS(i - 1) As Object
+                Set RESULTS_ITEMS(i - 1) = blockname_res_gn.Item(i)
             Next i
         End If
     End If
@@ -84,84 +86,78 @@ Public Sub patient_parser(search_str)
     
  
 End Sub
- 
 Public Function patient_matcher(rp)
- 
     patient_matcher = Nothing
     If rp.Resolved Then  'Item(1) is alway default to Account Email. NOT TESTED for Multiple Email Accounts!!!!!!!! BUG!!!!!!!!
         Set ct = rp.AddressEntry.GetContact
         If Not ct Is Nothing Then
-            Set p_label = ct.UserProperties.Find(isys_interface.uprop_ptlabel)
+            Set p_label = ct.UserProperties.Find(isys_interface.UPROP_PTLABEL)
             If p_label <> "NA" Then
                 patient_matcher = ct
                 MsgBox ct.LastName + ct.FirstName
             End If
         End If
     End If
- 
 End Function
- 
-Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item, tp_ct_item As Object)
-    Set last_sync = ap_item.UserProperties.Add(isys_interface.uprop_lastsync, olDateTime, olFormatDateTimeShortDateTime)
-    Set start_sync = ap_item.UserProperties.Add(isys_interface.uprop_startsync, olDateTime, olFormatDateTimeShortDateTime)
-    Set bill_state = ap_item.UserProperties.Add(isys_interface.uprop_billstate, olText)
-    Set bill_pid = ap_item.UserProperties.Add(isys_interface.uprop_billpid, olText)
-    Set last_bill = ap_item.UserProperties.Add(isys_interface.uprop_lastbill, olDateTime, olFormatDateTimeShortDateTime)
-    Set archiev_run = ap_item.UserProperties.Add(isys_interface.uprop_archievrun, olText)
-    Set sync_run = ap_item.UserProperties.Add(isys_interface.uprop_syncrun, olText)
-    Set sync_state = ap_item.UserProperties.Add(isys_interface.uprop_syncstate, olText)
- 
-    Set item_state = ap_item.UserProperties.Add(isys_interface.uprop_itemstate, olText)
- 
-    Set ap_label = ap_item.UserProperties.Add(isys_interface.uprop_aplabel, olText)
-    Set p_entryid = ap_item.UserProperties.Add(isys_interface.uprop_patient_entryid, olText)
-    Set tp_fullname = ap_item.UserProperties.Add(isys_interface.uprop_therapeut_fullname, olText)
-    Set tp_pid = ap_item.UserProperties.Add(isys_interface.uprop_therapeut_pid, olText)
-    Set ap_category = ap_item.UserProperties.Add(isys_interface.uprop_apcategory, olText)
- 
+Public Sub init_APLABELs(ap_item As Object, ap_type As Boolean, p_ct_item As Object, tp_ct_item As Object)
+    Set last_sync = ap_item.UserProperties.Add(isys_interface.UPROP_LASTSYNC, olDateTime, olFormatDateTimeShortDateTime)
+    Set start_sync = ap_item.UserProperties.Add(isys_interface.UPROP_STARTSYNC, olDateTime, olFormatDateTimeShortDateTime)
+    Set bill_state = ap_item.UserProperties.Add(isys_interface.UPROP_BILLSTATE, olText)
+    Set bill_pid = ap_item.UserProperties.Add(isys_interface.UPROP_BILLPID, olText)
+    Set last_bill = ap_item.UserProperties.Add(isys_interface.UPROP_LASTBILL, olDateTime, olFormatDateTimeShortDateTime)
+    Set archiev_run = ap_item.UserProperties.Add(isys_interface.UPROP_ARCHIEVRUN, olText)
+    Set sync_run = ap_item.UserProperties.Add(isys_interface.UPROP_SYNCRUN, olText)
+    Set sync_state = ap_item.UserProperties.Add(isys_interface.UPROP_SYNCSTATE, olText)
+    Set item_state = ap_item.UserProperties.Add(isys_interface.UPROP_ITEMSTATE, olText)
+    Set ap_label = ap_item.UserProperties.Add(isys_interface.UPROP_APLABEL, olText)
+    Set p_entryid = ap_item.UserProperties.Add(isys_interface.UPROP_PTEID, olText)
+    Set tp_fullname = ap_item.UserProperties.Add(isys_interface.UPROP_TPFULLNAME, olText)
+    Set tp_pid = ap_item.UserProperties.Add(isys_interface.UPROP_TPPID, olText)
+    Set ap_category = ap_item.UserProperties.Add(isys_interface.UPROP_APCATEGORY, olText)
     If ap_type = True Then
         bill_state.Value = "nobill"
         bill_pid.Value = "nopid"
         archiev_run.Value = "idle"
         sync_run.Value = "idle"
         sync_state.Value = "wait"
- 
         item_state.Value = "created"
  
- 
         peid = p_ct_item.EntryID
-        Set res = Application.GetNamespace("MAPI").GetDefaultFolder(9).Items.Restrict("[" & isys_interface.uprop_patient_entryid & "]='" & peid & "'").Restrict("[Categories]='present'")
+        Set res = Application.GetNamespace("MAPI").GetDefaultFolder(9).Items.Restrict("[" & isys_interface.UPROP_PTEID & "]='" & peid & "'").Restrict("[Categories]='present'")
         If res.Count = 1 Then
             ap_label.Value = "kickoffnew"
-            ct_item.UserProperties.Find(isys_interface.uprop_patientstate).Value = "new"
+            p_ct_item.UserProperties.Find(isys_interface.UPROP_PATIENTSTATE).Value = "new"
+            ap_item.Location = "NEU: " & bill_res.Count & ". Behandlung"   
         ElseIf res.Count > 1 Then
-            Set bill_res = res.Restrict("[" & isys_interface.uprop_billstate & "]='" & "nobill" & "'")
+            Set bill_res = res.Restrict("[" & isys_interface.UPROP_BILLSTATE & "]='" & "nobill" & "'")
             If bill_res > 1 Then
                 ap_label.Value = "followup"
-                ct_item.UserProperties.Find(isys_interface.uprop_patientstate).Value = "old"
+                p_ct_item.UserProperties.Find(isys_interface.UPROP_PATIENTSTATE).Value = "old"
+                ap_item.Location = bill_res.Count & ". Behandlung"
             Else
                 ap_label.Value = "kickoffold"
-                ct_item.UserProperties.Find(isys_interface.uprop_patientstate).Value = "oldnew"
+                p_ct_item.UserProperties.Find(isys_interface.UPROP_PATIENTSTATE).Value = "oldnew"
+                ap_item.Location = "STAMM: " & bill_res.Count & ". Behandlung"   
             End If
         End If
         p_entryid.Value = peid
         
         tp_fullname.Value = tp_ct_item.LastName & "_" & tp_ct_item.FirstName
-        tp_pid.Value = tp_ct_item.UserProperties.Find(isys_interface.uprop_therapeut_pid).Value
-        ap_category.Value = isys_interface.cate_strs(0)
+        tp_pid.Value = tp_ct_item.UserProperties.Find(isys_interface.UPROP_TPPID).Value
+        ap_category.Value = isys_interface.CATEGORY_STRS(0)
+        ap_item.Categories = isys_interface.CATEGORY_STRS(0)
  
-        ap_item.Categories = isys_interface.cate_strs(0)
+ 
+        ap_item.Subject = "Patient: " & p_ct_item.LastName & " " & p_ct_item.FirstName
+ 
     Else
         bill_state.Value = "NA"
         bill_pid.Value = "NA"
         archiev_run.Value = "NA"
         sync_run.Value = "NA"
         sync_state.Value = "NA"
- 
         item_state.Value = "NA"
- 
         ap_label.Value = "NA"
- 
  
         p_entryid.Value = "NA"
         tp_fullname.Value = "NA"
@@ -172,8 +168,5 @@ Public Sub init_aplabels(ap_item As Object, ap_type As Boolean, p_ct_item, tp_ct
  
  
  
-
- 
 End Sub
-
 

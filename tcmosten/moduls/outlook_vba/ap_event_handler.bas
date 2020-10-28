@@ -1,14 +1,10 @@
-
-'subject autochange
-'location (x treatment) autochange
-
-Public sel_patient_item
-Public sel_tp_item
-Public tp_eid
+'send and get name prefix hr. fr. dr.
  
+Public SEL_PATIENT_ITEM
+Public SEL_TP_ITEM
+Public TP_EID
 Public Sub add_AP(Item As Object)
     patient_meeting = False
- 
     If Item.Subject <> "" Then
         subj_str = Split(Item.Subject, ":")
         If subj_str(0) = "p" And UBound(subj_str) = 1 Then
@@ -24,8 +20,8 @@ Public Sub add_AP(Item As Object)
                     Next i
                     toolbox.patient_parser subj_str(1)
                 Else
-                    ReDim Preserve toolbox.results_items(0) As Object
-                    Set toolbox.results_items(0) = ct_item
+                    ReDim Preserve toolbox.RESULTS_ITEMS(0) As Object
+                    Set toolbox.RESULTS_ITEMS(0) = ct_item
                 End If
             End If
             form_add.Show
@@ -37,19 +33,18 @@ Public Sub add_AP(Item As Object)
     If Item.Recipients.Count = 3 And Item.Resources <> "" Then 'best case in which user create appointment without search in userform
         Set ct = Item.Recipients.Item(3).AddressEntry.GetContact
         If Not ct Is Nothing Then
-            Set therapeut_pid = ct.UserProperties.Find(isys_interface.uprop_therapeut_pid)
+            Set therapeut_pid = ct.UserProperties.Find(isys_interface.UPROP_TPPID)
             If therapeut_pid.Value <> "NA" Then
-                tp_eid = ct.EntryID
+                TP_EID = ct.EntryID
                 patient_meeting = True
- 
                 Set rp = Item.Recipients.Item(2)  'patient recipient index is alway 2 because outlook set resource index alway to last index
                 Set ct_item = toolbox.patient_matcher(rp)
                 If ct_item Is Nothing Then
                     MsgBox "add something to do if not match, i.e search patient again"
                     form_add.Show
                 Else
-                    ReDim Preserve toolbox.results_items(0) As Object
-                    Set toolbox.results_items(0) = ct_item
+                    ReDim Preserve toolbox.RESULTS_ITEMS(0) As Object
+                    Set toolbox.RESULTS_ITEMS(0) = ct_item
                     form_add.Show
                     
                 End If
@@ -57,12 +52,20 @@ Public Sub add_AP(Item As Object)
         End If
     End If
     
-    ct_item = sel_patient_item
-    If patient_meeting Then
-        init_aplabels Item, patient_meeting, ct_item
-    End If
  
+    If patient_meeting Then
+        toolbox.init_APLABELs Item, patient_meeting, SEL_PATIENT_ITEM, SEL_PATIENT_ITEM
+    End If
     
 End Sub
-
+ 
+Public Sub change_AP(Item As Object)
+    'is patient appointment?
+    If Item.UserProperties.Find(isys_interface.UPROP_APLABEL) <> "NA" Then
+        'is changed by programm?
+        If Item.UserProperties.Find(isys_interface.UPROP_SYNCRUN).Value = "idle" And DateDiff("s", Item.UserProperties.Find(isys_interface.UPROP_LASTSYNC).Value, DateTime.Now) > 1 Then
+    
+    
+End sub
+ 
 
