@@ -140,7 +140,7 @@ Run Restrict    --> Response after restricted -->
 Label,Save      <-- Response  SQL Updated <--
                 --> GET Request final-->                        stamp last sync
                           
-Label_Patient: "created""new","old","newold"
+Label_Patient: "created""new","old","oldnew"
 
 Default Value of oltext, olyesno, oldatetime: "", #01/01/4501#, False
 
