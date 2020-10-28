@@ -81,26 +81,27 @@ Public Sub change_AP(Item As Object)
                 Item.UserProperties.Find(isys_interface.UPROP_ITEMSTATE).Value = "changed_aft_error"
                 MsgBox "Patientendaten geändert und in Outlook gespeichert!" & vbNewLine & "Achtung: Die letzten Synchronisierungen waren fehlerhaft! Informieren Sie bitte Administrator", vbExclamation
         End If
-    End If
 
-    'check unpermitted changes
-    If Item.Recipients.Count = 3 Then 
-        'resources name match therapeut name
-        if Item.recipients.Item(2).Resolved
-        if Item.recipients.Item(3).Resolved
-        'patient eid match patienteid in userproperties
-        if Item.UserProperties.Find(isys_interface.UPROP_PTEID).Value <> Item.Recipients.Item(2).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_PTEID).Value
 
-        'check therapeut pid in recipients
-        if Item.UserProperties.Find(isys_interface.UPROP_TPPID).Value <> Item.Recipients.Item(3).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_TPPID).Value
-    Else
-        'set back therapeut per pid
-        'set back patient per eid
-        'set back subject
-    End if
+        'check unpermitted changes
+        If Item.Recipients.Count = 3 Then 
+            'resources name match therapeut name
+            if Item.recipients.Item(2).Resolved
+            if Item.recipients.Item(3).Resolved
+            'patient eid match patienteid in userproperties
+            if Item.UserProperties.Find(isys_interface.UPROP_PTEID).Value <> Item.Recipients.Item(2).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_PTEID).Value
+
+            'check therapeut pid in recipients
+            if Item.UserProperties.Find(isys_interface.UPROP_TPPID).Value <> Item.Recipients.Item(3).AddressEntry.GetContact.UserProperties.Find(isys_interface.UPROP_TPPID).Value
+        Else
+            'set back therapeut per pid
+            'set back patient per eid
+            'set back subject
+        End if
 
 
     'set apcategory value read from app - TODO
+    End If
 End sub
  
 
