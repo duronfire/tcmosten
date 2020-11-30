@@ -4,8 +4,13 @@
 
 
 date time format:
-separators for date and time i.e. "2020/01/31 14:05:01" is "/" and ":". Separators in Output Text depand on system setting. Deutsch --> "2020.01.31 14:05:01"
-Order of format is defined by user: "2020/01/31 14:05:01" --> "yyyy/MM/dd HH:mm:ss" where must use separators "/" and ":" for Format() function
+To Set a Date in outlook:
+01 Jan 2020 --> Dim dt as Date    dt="01/01/2020 12:00 AM" alternative dt="01.01.2020 12:00 AM" 
+31 Jan 2020 --> Dim dt as Date    dt="31/01/2020 12:00 AM" alternative dt="31.01.2020 12:00 AM" But VBA can also regonize opposite input like  dt="01/31/2020 12:00 AM" alternative dt="01.31.2020 12:00 AM"!!!!!
+Separators and order of numbers in Output Text depand on system region setting. Deutsch --> "31.01.2020 14:05:01" USA "01/31/2020 2:05:01 PM"
+Order of format is defined by user: format("31.01.2020 14:05:01", "dd/mm/yyyy hh:mm:ss") --> 31/01/2020 14:05:01
+Restrict using also local region setting to filter. Deutsch Filter Restrict --> "31/01/2020 14:05:01" or "31.01.2020 2:05.01 PM"
+
 
 outlook .pst/.ost databank
 IMAP Account will be assigned to xxxx@xxxx.xx.ost defaultly(st.gallen@tcm-osten.ch.ost under appdata/local/microsoft/outlook). Calendar and Contacts are also stored in this file.

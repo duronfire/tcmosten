@@ -7,7 +7,7 @@ initdb.exe -E UTF8 -D C:\SQLData\tcmosten\dummy\data
 cp -Force C:\SQLData\tcmosten\pg_hba.conf C:\SQLData\tcmosten\dummy\data\
 cp -Force C:\SQLData\tcmosten\postgresql.conf C:\SQLData\tcmosten\dummy\data\
 pg_ctl -D C:\SQLData\tcmosten\dummy\data start
-createuser.exe -h t440p -d -U st.gallen -s wz
+createuser.exe -h t440p -d -U st.gallen -s zhu
 createdb.exe -h t440p -U st.gallen tcmosten
 
 
@@ -20,7 +20,7 @@ where 0.0.0.0/0 is the ip range for permitted clients.
  
 postgresql.conf:
 
-change listen_addresses = 'localhost' to 'xxx.xxx.xxx.xxx, xxx.xxx.xxx.xxx'
+change listen_addresses = 'localhost' to '192.168.xxx.xxx (network ip ethernet or/and wlan), 127.0.0.1' #####localhost should not included
 '*' for all host interfaces/adresses
 which is the host ip adresse or adresses
 
@@ -42,6 +42,21 @@ open firewall
 sudo firewall-cmd --add-service=postgresql --permanent
 sudo firewall-cmd --reload
 systemctl restart postgresql-12.service
+
+if postgresql startet automaticly by systemd and it use wireless ip address. It doesnt work because wlan has not been connect.
+postgresql must be startet after wireless connction is build!!!
+Using systemctl edit postgresql-12.server to create a override.conf file under postgresql-12.service.d
+Add following to override.conf
+[Unit]
+After=
+After=network-online.target
+After=syslog.target
+Wants=network-online.target
+
+
+
+
+
 
 
 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-managing_confined_services-postgresql-configuration_examples
@@ -92,3 +107,17 @@ Check with the ps command that the postgresql process displays the new location:
 ~]# ps aux | grep -i postmaster
 
 postgres 21564  0.3  0.3  42308  4032 ?        S    10:13   0:00 /usr/bin/postmaster -p 5432 -D /opt/postgresql/data/
+
+
+##########Disable Selinux##########################
+
+Disabling SELinux permanently
+
+Edit the /etc/selinux/config file, run:
+sudo vi /etc/selinux/config
+
+Set SELINUX to disabled:
+SELINUX=disabled
+
+Save and close the file in vi/vim. Reboot the Linux system:
+sudo reboot

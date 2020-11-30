@@ -3,11 +3,11 @@ import datetime,os,json,re
 
 
 
-outlook=win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
-accounts=win32com.client.Dispatch("Outlook.Application").Session.Accounts
-inbox=outlook.GetDefaultFolder(6)
-calendar = outlook.GetDefaultFolder(9) # olFolderCalendar = 9, olFOlderInbox = 6 
-
+outlook=win32com.client.Dispatch("Outlook.Application")
+#accounts=win32com.client.Dispatch("Outlook.Application").Session.Accounts
+inbox=outlook.GetNamespace("MAPI").GetDefaultFolder(6)
+calendar = outlook.GetNamespace("MAPI").GetDefaultFolder(9) # olFolderCalendar = 9, olFOlderInbox = 6 
+contact = outlook.GetNamespace("MAPI").GetDefaultFolder(10) # olFolderCalendar = 9, olFOlderInbox = 6 
 
 #os.startfile("outlook") #start outlook if login is needed
 
@@ -36,7 +36,7 @@ print("time format filter is: ", sFilter)
 
 
 # performance test loop
-for i in range(10000):
+for i in range(5):
     week_appointments=calendar.Items.Restrict(sFilter)
 
     print("total appointments items", calendar.Items.Count)
@@ -74,7 +74,11 @@ for i in range(10000):
         #     print("Error: Check OUTLOOK, No organizer!") 
 
     print(appointments_output)
-
+print(calendar.Items.Item(30).Location)
+it = calendar.Items.Item(30)
+it.PropertyAccessor.SetProperty("urn:schemas:calendar:location", "changed from python")
+print(calendar.Items.Item(30).Location)
+#outlook.Quit()
 
 
 

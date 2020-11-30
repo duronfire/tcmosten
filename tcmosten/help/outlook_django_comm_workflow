@@ -143,5 +143,68 @@ Label,Save      <-- Response  SQL Updated <--
 Label_Patient: "created""new","old","oldnew"
 
 Default Value of oltext, olyesno, oldatetime: "", #01/01/4501#, False
+Dim As String default to ""
+Dim As Object default to nothing
+Dim As arr() default UBound(arr) to -1
+
+all class variable must be in subprocedure initialized and reseted before re-use. Dynamic array must be earased use "Erase function"
+'item.save in subprocedur of item_change itself will not activate event item_change
+
+VBA Bug:
+if userform call a function "example" and this function "example" results a event. userform stops after event is done and will not continue running code after function "example".
+in one function only 1 event can be triggered. But which one will be triggered is not exact clear! 
+Typically only the event triggered by last trigger-function (i.e. Save is last function, it will trigger CT_Add) will be finished, at the same time the event which was called before (Save Ap called AP_Add event) stops. But if CT Save is not last function then, the first triggered event (AP_Add) will finished and CT_ADD event will not be called!!!!
+If Item.Save is in a loop, event will not be called at all!!!!
+VBA raises no error if no permission to read or write use OPEN xxx as xxx
 
 
+VBA ERROR HANDLING:
+On Error resume next disable all error after the line where error orcurs and go on until end sub
+On Error GoTo 0 disable the effect of "on error resume next" and error after that will cause exception 
+On Error GoTo -1 disable all exception which was throwed, not tested
+
+URL Spec:
+RFC3986 definition:Url can only include a-zA-Z and 0-9 and -_.~ signs 
+! * ' ( ) ; : @ & = + $ , / ? # [ ] are special characters with syntax meaning
+
+
+
+
+
+Backup:
+method 1: backup database folder ("/data" folder), only after shutdown Server
+method 2: filesystem snapshot
+method 3: pg_dump
+
+
+
+
+
+    '2.1. download billed/changed pid of patient ap prop by HTTP GET
+    PROP_AP_DOWNLOAD_ARRAY(0) = "http://schemas.microsoft.com/mapi/proptag/0x0FFF0102" 'PidTagEntryId (binary)
+    
+    '2.2. download new/changed invoice of patient ap user prop by HTTP GET
+    UPROP_AP_DOWNLOAD_ARRAY(0) = UPROP_BILLPID
+    UPROP_AP_DOWNLOAD_ARRAY(1) = UPROP_BILLSTATE
+    UPROP_AP_DOWNLOAD_ARRAY(2) = UPROP_LASTBILL
+
+    
+    '2.3. upload new/changed ap prop by HTTP POST
+    PROP_AP_UPLOAD_ARRAY(0) = "urn:schemas:calendar:dtstart"
+    PROP_AP_UPLOAD_ARRAY(1) = "urn:schemas:calendar:dtend"
+    PROP_AP_UPLOAD_ARRAY(2) = "urn:schemas:calendar:created"
+    PROP_AP_UPLOAD_ARRAY(3) = "urn:schemas:calendar:lastmodified"
+    PROP_AP_UPLOAD_ARRAY(4) = "urn:schemas:calendar:organizer"
+    PROP_AP_UPLOAD_ARRAY(5) = "http://schemas.microsoft.com/mapi/proptag/0x0FFF0102" 'PidTagEntryId (binary)
+    
+    '2.4. upload new/changed ap user prop by HTTP POST
+    UPROP_AP_UPLOAD_ARRAY(0) = UPROP_APCATEGORY
+    UPROP_AP_UPLOAD_ARRAY(1) = UPROP_TPFULLNAME
+    UPROP_AP_UPLOAD_ARRAY(2) = UPROP_PEID
+    UPROP_AP_UPLOAD_ARRAY(3) = UPROP_APLABEL
+    UPROP_AP_UPLOAD_ARRAY(4) = UPROP_ARCHIEVLABEL
+    UPROP_AP_UPLOAD_ARRAY(5) = UPROP_TPPID
+    UPROP_AP_UPLOAD_ARRAY(6) = UPROP_STARTSYNC
+
+    '2.5. check response of HTTP POST and stamp
+    UPROP_AP_RESPONSE_ARRAY(0) = UPROP_LASTSYNC
