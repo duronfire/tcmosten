@@ -65,6 +65,9 @@ class CreateDummy(View):
         if not bool(dummy_md): # query result must not be empty!!!!
             dummy_md = Method.create()
             print("dummy_md")
+
+
+        '''
         if not bool(dummy_pt): # query result must not be empty!!!!
             dummy_pt = Patient.create(EntryID="DummyEntryID",FirstName="DummyFirstName",LastName="DummyLastName",Birthday=datetime.date(1900,1,1),Gender="0",Email1Address="dummy@dummy.dummy",Account="00000000",
                         CreationTime=datetime.datetime(2020,12,28,0,0,0),LastModificationTime=datetime.datetime(2020,12,28,1,0,0),patientstate="NA",lastsync=datetime.datetime(4501,1,1,0,0,0),location_id=1)
@@ -82,5 +85,6 @@ class CreateDummy(View):
 
             print("dummy_rn")
         return HttpResponse("yes")
+        '''
         #except:
             #return HttpResponseNotFound("Error by Dummy Creation!")
