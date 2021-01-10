@@ -1,7 +1,8 @@
 from django.db import models
 import datetime
+# Create your models here.
 
-class Therapist(models.Model):
+class Staff(models.Model):
 
     # ol properties
     FirstName = models.CharField(max_length=30)
@@ -13,14 +14,21 @@ class Therapist(models.Model):
     MailingAddressCountry = models.CharField(max_length=30)
     MailingAddressPostalCode = models.CharField(max_length=30)
     MailingAddressStreet = models.CharField(max_length=30)
-    GovernmentIDNumber = models.CharField(max_length=30)
-    Account = models.CharField(max_length=30)
+    GovernmentIDNumber = models.CharField(max_length=30,default="NA")
+    Account = models.CharField(max_length=30,default="NA")
     MobileTelephoneNumber = models.CharField(max_length=30, default="NA")
+    Role = models.CharField(max_length=30,choices=(("therapist","therapist"),("assistant","assistant"),("administrator","administrator"),("others","others")),default='therapist')
 
     # user properties
-    syncstate = models.CharField(max_length=30, default="created")
-    lastsync = models.DateTimeField(default=datetime.datetime(4501,1,1,0,0,0))   
+     
 
     # sql properties
     Creation = models.DateTimeField(auto_now_add = True)
-    LastModified = models.DateTimeField(auto_now = True)
+    LastModified = models.DateTimeField(auto_now = True) 
+
+
+
+
+    def __str__(self):
+        return self.LastName+'_'+self.FirstName
+    

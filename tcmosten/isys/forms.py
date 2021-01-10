@@ -14,3 +14,6 @@ class SyncForm(forms.Form):
             new_ap_key = "newap" + str(new_ap)
             self.fields[new_ap_key]=forms.CharField(label=str(new_ap))
             self.fields[new_ap_key]=forms.CharField(label=str(new_ap))
+
+class SyncPostForm(forms.Form):
+    post_str = forms.CharField(label='post_str')

@@ -27,3 +27,10 @@ Outlook category:
 to enable category all Calendar & Co. must be stored in a .pst file, as written in last step.
 
 
+Outlook Object will be always referenced, that means, you always only have one object reference. The changes you made will apply to all objects,that you have referenced.
+
+
+Archive old meetings:
+after changed archivelabel, the old meeting can be archived by outlook archive function
+
+

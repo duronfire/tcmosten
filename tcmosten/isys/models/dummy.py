@@ -11,7 +11,7 @@ class Dummy(models.Model):
     vorname = models.CharField(max_length=30,default="defaultname")
     nachname = models.CharField(max_length=30,default="defaultname")
     
-    geburtstag = models.DateField(default=datetime.date.today())
+    geburtstag = models.DateField(default=datetime.date(4501,1,1))
     start=models.DateTimeField(default = datetime.datetime.now())
     end=models.DateTimeField(default = datetime.datetime.now())
 

@@ -1,3 +1,6 @@
+django version 3.1
+outlook 2013
+
 Function description of comm interface outlook/django
 1. in order to keep calendar in outlook as main work space for clinic, patient info must be labeled and synchronized with django
 2. non-patient info must not be labeled and synchronized
@@ -150,12 +153,48 @@ Dim As arr() default UBound(arr) to -1
 all class variable must be in subprocedure initialized and reseted before re-use. Dynamic array must be earased use "Erase function"
 'item.save in subprocedur of item_change itself will not activate event item_change
 
+
+
+
+
+
 VBA Bug:
 if userform call a function "example" and this function "example" results a event. userform stops after event is done and will not continue running code after function "example".
 in one function only 1 event can be triggered. But which one will be triggered is not exact clear! 
 Typically only the event triggered by last trigger-function (i.e. Save is last function, it will trigger CT_Add) will be finished, at the same time the event which was called before (Save Ap called AP_Add event) stops. But if CT Save is not last function then, the first triggered event (AP_Add) will finished and CT_ADD event will not be called!!!!
-If Item.Save is in a loop, event will not be called at all!!!!
+If Item.Save is in a loop, whether event will be called depends on code. Behavier is uncertain! Known behavier:
+    1. if there is no msgbox called after save, all save will be call curiously in one shot one after another at last of code execution! The run order is not the same as defined. It's a huge bug!!!!!!!
+    2. to overcome this bug, simplely add a msgbox at the end of your sub, which called item.save. see sync_proc.run_sync logger.log "warning", "Outlook wurde soeben erfolgreich sychronisiert!"
 VBA raises no error if no permission to read or write use OPEN xxx as xxx
+
+Outlook PropertyAccesor:
+"Gender", "urn:schemas:contacts:gender" 'Bug: if use "http://schemas.microsoft.com/mapi/proptag/0x3A4D0002, runtime error with getproperty, but works with setproperty"
+
+By Using Propertyaccessor, aLL date proprty will be set in cureent system region time and retrieved in UTC Time. For example propertyassessor.setproperty "birthday", #01.10.2020 12:00 AM# in german time zone, getproperty return UTC date #30.09.2020 11:00 PM#
+PropertyAccessor returns "Null" Vartype=1 by empty birthday and item.Birthday returns value 01.01.4501 by empty birthday!!!Cstr(Null) will return error!!!!
+PropertyAccessor returns #30.09.2020 11:00 PM# (UTC Time) by existing birthday and item.Birthday returns value #01.10.2020# by empty birthday (local region time for i.e. Germany) without hh:mm:ss. Bo set birthday by propertyaccessor.setproperty  the hh:mm:ss will be ignored 
+
+PropertyAccessor returns raw binary value of entryid and item.EntryID returns str value of entryid!!!
+PropertyAccessor to setproperty with date type (Ptyptime 0x0040). it must use #01.01.2020 2:00 PM# or DateValue("01.01.2020 2:00 PM"). Using "01.01.2020 2:00 PM" case type error! 
+for example : Dim dt As Data and dt="01/10/2020 2:00 PM" will return a string with date in region format, but not date in variante format!!!
+
+empty String property returns ""  by both propertyaccessor or attribute 
+
+Dictionary stores only reference of object, if object changes, the object in a dictionary changes too!
+
+datetime has a variable length!!!!!!!
+datetime.datetime() always only show YYYY-MM-DD HH:MM, if seconds is 0. If seconds and miliseconds are not 0, it will show full datetime.datetime(yyyy,mm,dd,hh,mm,ss,mmmmm)
+
+
+Application_Quit Event:
+if Quit Event is called, all modules are already unloaded and also the global variables and objects. Then the event code will be invoked. So you can't write useful event code in this event.  
+
+
+
+
+
+
+
 
 
 VBA ERROR HANDLING:
@@ -180,31 +219,66 @@ method 3: pg_dump
 
 
 
-    '2.1. download billed/changed pid of patient ap prop by HTTP GET
-    PROP_AP_DOWNLOAD_ARRAY(0) = "http://schemas.microsoft.com/mapi/proptag/0x0FFF0102" 'PidTagEntryId (binary)
-    
-    '2.2. download new/changed invoice of patient ap user prop by HTTP GET
-    UPROP_AP_DOWNLOAD_ARRAY(0) = UPROP_BILLPID
-    UPROP_AP_DOWNLOAD_ARRAY(1) = UPROP_BILLSTATE
-    UPROP_AP_DOWNLOAD_ARRAY(2) = UPROP_LASTBILL
+            'check unpermitted changes
+            unpermitted_change_p = True
+            tp_change = False
+            unpermitted_change_tp = True
+            
+            
+            Set rps = item.Recipients
+            If item.Recipients.Count = 3 Then
+                'check item 2
+                ct_item2_plabel = ""
+                If rps.item(2).Resolved Then
+                    Set ct_item2 = rps.item(2).AddressEntry
+                    If Not ct_item2 Is Nothing Then
+                        Set ct_item2 = ct_item2.GetContact
+                        ct_item2_plabel = ct_item2.UserProperties.Find(isys_interface.UPROP_PLABEL).Value
+                    End If
+                End If
+                'check therapist
+                If rps.item(3).Resolved Then
+                    Set ct_item3 = rps.item(3).AddressEntry
+                    If Not ct_item3 Is Nothing Then
+                        Set ct_item3 = ct_item3.GetContact
+                        
+                        If ct_item2_plabel = "patient" And ct_item3.UserProperties.Find(isys_interface.UPROP_PLABEL).Value = "patient" Then ' item 2 is patient
+                            If ct_item2.EntryID = item.UserProperties.Find(isys_interface.UPROP_PEID).Value Then
+                                unpermitted_change_p = False
+                                If ct_item3.UserProperties.Find(isys_interface.UPROP_STAFFLABEL).Value = "therapist" Then
+                                    If ct_item3.UserProperties.Find(isys_interface.UPROP_STAFFPID).Value <> item.UserProperties.Find(isys_interface.UPROP_STAFFPID).Value Then
+                                        tp_change = True
+                                        unpermitted_change_tp = False
+                                        MsgBox "Änderung des therapists ist gespeichert!" 'user confirm change
+                                    Else
+                                        unpermitted_change_tp = False
+                                    End If
+                                End If
+                                
+                            ElseIf ct_item3.EntryID = item.UserProperties.Find(isys_interface.UPROP_PEID).Value Then
+                                unpermitted_change_p = False
+                                If ct_item2.UserProperties.Find(isys_interface.UPROP_STAFFLABEL).Value = "therapist" Then
+                                    If ct_item2.UserProperties.Find(isys_interface.UPROP_STAFFPID).Value <> item.UserProperties.Find(isys_interface.UPROP_STAFFPID).Value Then
+                                        tp_change = True
+                                        unpermitted_change_tp = False
+                                        MsgBox "Änderung des therapists ist gespeichert!" 'user confirm change
+                                    Else
+                                        unpermitted_change_tp = False
+                                    End If
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
 
-    
-    '2.3. upload new/changed ap prop by HTTP POST
-    PROP_AP_UPLOAD_ARRAY(0) = "urn:schemas:calendar:dtstart"
-    PROP_AP_UPLOAD_ARRAY(1) = "urn:schemas:calendar:dtend"
-    PROP_AP_UPLOAD_ARRAY(2) = "urn:schemas:calendar:created"
-    PROP_AP_UPLOAD_ARRAY(3) = "urn:schemas:calendar:lastmodified"
-    PROP_AP_UPLOAD_ARRAY(4) = "urn:schemas:calendar:organizer"
-    PROP_AP_UPLOAD_ARRAY(5) = "http://schemas.microsoft.com/mapi/proptag/0x0FFF0102" 'PidTagEntryId (binary)
-    
-    '2.4. upload new/changed ap user prop by HTTP POST
-    UPROP_AP_UPLOAD_ARRAY(0) = UPROP_APCATEGORY
-    UPROP_AP_UPLOAD_ARRAY(1) = UPROP_TPFULLNAME
-    UPROP_AP_UPLOAD_ARRAY(2) = UPROP_PEID
-    UPROP_AP_UPLOAD_ARRAY(3) = UPROP_APLABEL
-    UPROP_AP_UPLOAD_ARRAY(4) = UPROP_ARCHIEVLABEL
-    UPROP_AP_UPLOAD_ARRAY(5) = UPROP_TPPID
-    UPROP_AP_UPLOAD_ARRAY(6) = UPROP_STARTSYNC
-
-    '2.5. check response of HTTP POST and stamp
-    UPROP_AP_RESPONSE_ARRAY(0) = UPROP_LASTSYNC
+            If unpermitted_change_tp Or unpermitted_change_p Then
+               If unpermitted_change_tp Then
+                   MsgBox "Geänderter therapist wurde nicht erkannt! Eingabe des geänderten therapists ist nicht vollständig or falsch!" & vbNewLine & "Änderung wird nicht gespeichert!", vbExclamation
+               End If
+               If unpermitted_change_p Then
+                   MsgBox "Ändern des Patienten in der bestehenden Sitzung nicht gestattet!" & vbNewLine & "Bei Bedarf erstellen Sie neue Sitzung für diesen Patienten" & vbNewLine & "und ggf. die alte Sitzung über Kategorie als Absagen markieren" & vbNewLine & "Änderung wird nicht gespeichert!", vbExclamation
+               End If
+               rollback_ap_changes item
+               SAVE_LABEL = True
+            End If

@@ -4,4 +4,4 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register([Dummy,Therapist,Patient,Meeting,Invoice])
+admin.site.register([Bankkonto,Buchung,Habenkonto,Location,Mahnung,Meeting,Method,Patient,Rechnung,Sollkonto,Staff,Tarif,Uploadfilepath,Versicherung])

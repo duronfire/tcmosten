@@ -1,0 +1,18 @@
+# TODO:
+05.01.21:
+done 1. Check update office 2010 --> 2013 (2016?). Test Outlook workflow on live
+2. Front End:
+    a. method
+    b. rechnung
+    c. mahnung
+    d. uploadfile
+    e. buchung
+
+
+
+
+07.01.21:
+done 1. add sql pid to contact and appointment after sync. major advantage is, if EntryID changes due to outlook version change or system change, new EntryID in sql can be easily updated.
+done 2. add filter(archivelabel = live) both in sql meeting and outlook meeting --> means if archived, no more sync any more.
+done 3. add new billstate "paid" and new lastbill date for "paid" 
+

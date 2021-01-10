@@ -1,5 +1,24 @@
 ### Windows ###
 
+
+using install file to install postgresql 12
+set data path to c:\postgresql\12\data during install
+add \bin to system path
+
+postgresql will be registered as a service and autorun by start. 
+
+postgres database is added default
+add tcmosten superuser and database by running:
+
+createuser.exe -h t440p -U st.gallen -s zhu
+createdb.exe -h t440p -U st.gallen tcmosten
+
+then use pgadmin tools to manage databases.
+
+
+
+not recommanded to install postgresql by zip, hence you have to config more things.
+
 pg_ctl -D C:\SQLData\tcmosten\dummy\data stop
 rm -Recurse -Force C:\SQLData\tcmosten\dummy\data
 mkdir C:\SQLData\tcmosten\dummy\data
@@ -7,7 +26,7 @@ initdb.exe -E UTF8 -D C:\SQLData\tcmosten\dummy\data
 cp -Force C:\SQLData\tcmosten\pg_hba.conf C:\SQLData\tcmosten\dummy\data\
 cp -Force C:\SQLData\tcmosten\postgresql.conf C:\SQLData\tcmosten\dummy\data\
 pg_ctl -D C:\SQLData\tcmosten\dummy\data start
-createuser.exe -h t440p -d -U st.gallen -s zhu
+createuser.exe -h t440p -U st.gallen -s zhu
 createdb.exe -h t440p -U st.gallen tcmosten
 
 

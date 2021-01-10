@@ -1,10 +1,10 @@
 import os
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.views import View
-from ..models.therapist import Therapist
+from ..models.patient import Patient
 
-class UpdateToServer(View):
+class PostPtUpdate(View):
 
     def get(self,request):
 

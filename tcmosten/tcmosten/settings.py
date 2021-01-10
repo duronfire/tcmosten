@@ -78,9 +78,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'tcmosten',
-        'USER': 'zhu',
+        'USER': 'tcmosten',
         'PASSWORD': '',
-        'HOST': '192.168.2.124',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -117,7 +117,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

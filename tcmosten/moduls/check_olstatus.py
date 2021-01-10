@@ -9,7 +9,6 @@ UPROP_BILLPID = "billpid"  #-1 = nopid, 1 to xxxxx bill pid in sql,  ap only pro
 UPROP_LASTBILL = "lastbill"  #last timestamp of open bill,  ap only prop
 UPROP_ARCHIEVRUN = "archievrun"  #idle, run, error for permission archiev ap,  ap only prop
 UPROP_SYNCRUN = "syncrun"  #idle, run, error,  for permission save changes
-UPROP_SYNCSTATE= "syncstate"  #wait,gotsignal,restricted,gotform,gotsqlupdated,saved
 UPROP_TPPID = "tppid"  # therapeut has own table, ap only prop
 #ol sql interact:
 UPROP_ITEMSTATE = "itemstate"  #created, changed, changed_aft_timeout, changed_aft_error, onserver for identify change states, interact with start/last sync stamp
