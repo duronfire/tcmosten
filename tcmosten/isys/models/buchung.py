@@ -7,7 +7,7 @@ import datetime
 
 
 class Buchung(models.Model):
-    belegnr = models.CharField(max_length=30,default="NA")
+    belegnr = models.CharField(max_length=30,default="init")
     belegdatum = models.DateField(default=datetime.date(4501,1,1))
     buchungstext = models.CharField(max_length=200)
 
@@ -30,4 +30,5 @@ class Buchung(models.Model):
         buchung=cls(habenkonto=habenkonto,sollkonto=sollkonto)
         buchung.save()
         buchung.belegnr = str(datetime.datetime.today().year) + "-" + str(buchung.id).zfill(6)
+        buchung.save()
         return buchung
