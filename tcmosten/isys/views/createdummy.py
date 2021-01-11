@@ -84,7 +84,8 @@ class CreateDummy(View):
             dummy_rn = Rechnung.create(meeting_ids=[1])
 
             print("dummy_rn")
-        return HttpResponse("yes")
         '''
+        return HttpResponse("yes")
+
         #except:
             #return HttpResponseNotFound("Error by Dummy Creation!")
