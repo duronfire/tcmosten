@@ -125,7 +125,8 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static_ROOT')
+#STATIC_ROOT = os.path.join(BASE_DIR,'static_ROOT') # only for production: use collectstatic to copy all static files from STATICFILES_DIRS to STATIC_ROOT, then use a webserver to host all files under STATIC_ROOT. Django will not server these files !!
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'thirdparty','bootstrap'),]
+#STATICFILES_DIRS = [os.path.join(BASE_DIR,'thirdparty','bootstrap'),] 
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static_ROOT'),] # files under STATICFILES_DIRS will be served as /static/ only if DEBUG=True. Don't use debug = True in production!
