@@ -53,7 +53,10 @@ connect to server use: psql.exe -h xxx.xxx.xxx.xxx tcmosten
 
 ### Linux ###
 
-same as windows for initdb
+1. install postgres12:
+
+same as windows for initdb 
+su - postgres -c "/usr/pgsql-12/bin/initdb -E UTF8 -D /var/lib/pgsql/12/data/"
 
 change pgdata under linxu:
 
@@ -72,10 +75,65 @@ After=network-online.target
 After=syslog.target
 Wants=network-online.target
 
+2. Disable Selinux
+##########Disable Selinux##########################
+
+Disabling SELinux permanently
+
+Edit the /etc/selinux/config file, run:
+sudo vi /etc/selinux/config
+
+Set SELINUX to disabled:
+SELINUX=disabled
+
+Save and close the file in vi/vim. Reboot the Linux system:
+sudo reboot
+
+
+3. install pgadmin4:
+sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf config-manager --set-enabled PowerTools
+sudo dnf install pgadmin4
+sudo /usr/pgadmin4/bin/pgadmin4-web-setup.sh
+start pgadmin4 and using "add server" to connect to created postgresql databases
 
 
 
 
+
+
+
+
+
+
+######Backup and Restore#######
+
+
+1. Back up with shell
+
+pg_dumpall --clean -f xxxx(dumped file)
+--clean means: Include SQL commands to clean (drop) databases before recreating them. DROP commands for roles and tablespaces are added as well.
+backup pg_hba.conf and postgresql.conf
+
+2. Restore
+If fresh new server for first time use:
+set locale to de_CH.UTF8 (linux) or German 1252 (Windows)
+change locale in dumped file
+
+check and if needed,install postgresql-contrib for adminpack Extension 
+
+systemctl stop postgresql-12.service
+rm -rf /var/lib/pgsql/12/data/*
+su - postgres -c "/usr/pgsql-12/bin/initdb -E UTF8 -D /var/lib/pgsql/12/data/" 
+psql -f xxxx(dumped file) postgres
+systemctl start postgresql-12.service
+Note:If you specified --clean, you must connect to the postgres database initially
+
+setup pg_hba.conf and postgresql.conf
+setup ALLOWED_HOSTS in settings.py for django 
+setup firewall for django
+firewall-cmd --zone=public --add-port=8000/tcp --permanent 
+firewall-cmd --reload
 
 
 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-managing_confined_services-postgresql-configuration_examples
@@ -128,15 +186,3 @@ Check with the ps command that the postgresql process displays the new location:
 postgres 21564  0.3  0.3  42308  4032 ?        S    10:13   0:00 /usr/bin/postmaster -p 5432 -D /opt/postgresql/data/
 
 
-##########Disable Selinux##########################
-
-Disabling SELinux permanently
-
-Edit the /etc/selinux/config file, run:
-sudo vi /etc/selinux/config
-
-Set SELINUX to disabled:
-SELINUX=disabled
-
-Save and close the file in vi/vim. Reboot the Linux system:
-sudo reboot
