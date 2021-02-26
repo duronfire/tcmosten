@@ -1,0 +1,2 @@
+1. copy package.json to install folder (i.e. github/tcmosten/tcmosten/isys_js/linux)
+run npm install
