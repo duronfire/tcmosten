@@ -9,7 +9,7 @@ import { PlusCircle } from 'react-feather';
 class AddButton extends React.Component{
   constructor(props) {
       super(props);
-      this.state = {count:1};
+      this.state = {inputs:[]};
   
       // This binding is necessary to make `this` work in the callback
       this.handleClick = this.handleClick.bind(this);
