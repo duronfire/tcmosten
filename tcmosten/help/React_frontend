@@ -1,3 +1,0 @@
-Warning: 
-only Capital case for all class names!!! lower case will not work and give no error message!!!
-Arrow function for assgin object literal must use ({}), i.e. state => ({x:y}), state=>{} will not work!

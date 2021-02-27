@@ -9,15 +9,18 @@ import { PlusCircle } from 'react-feather';
 class AddButton extends React.Component{
   constructor(props) {
       super(props);
-      this.state = {inputs:[]};
+      this.state = {count: [{0: null}]};
   
       // This binding is necessary to make `this` work in the callback
       this.handleClick = this.handleClick.bind(this);
     }    
 
     handleClick() {
+      const form_array = this.state.count
+      const current_index = form_array[form_array.length-1].key+1
+
       this.setState(
-         (state)=>({count: state.count+1})
+         (state)=>({count: state.count.puch({[current_index]:null})})
       );
     }
 
@@ -59,8 +62,12 @@ class MahnungForm extends React.Component{
               <th>Content</th>
             </tr>
           </table>
-
-          {items} 
+          <form>
+          <ul>
+          {items}
+          </ul>
+          <input type="submit" value="Submit" />
+          </form>
         </fragment>
 
 
@@ -78,13 +85,13 @@ class MahnungTable extends React.Component{
 
     render() {
       return (
-        <form>
+        <li>
           <label>
             Name:
             <input type="text" name="name" />
           </label>
-          <input type="submit" value="Submit" />
-        </form>
+        </li>
+
       );
 
     }
