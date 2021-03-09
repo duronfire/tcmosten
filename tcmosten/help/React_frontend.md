@@ -6,6 +6,9 @@
         setState in function of component must be cased with "if". except event handler, it will cause infinit loop.
     if key is used, key will not be passt as argument. To get key passt, pass both id = xxx with key = xxx to component and retrieve key by id 
 
+# clone object and array
+    object using var newobj = {...oldobj}
+    array using var newarray = oldarray.slice()
 
 # about bind():
 
@@ -47,4 +50,40 @@
     <button onClick={(e) => this.handleClick(id, e)}
     <button onClick={this.handleClick.bind(this, id)}
     In both cases, the e argument representing the React event will be passed as a **second** argument after the ID. With an arrow function, we have to pass it explicitly, but with bind any further arguments are automatically forwarded.
+
+
+# setState for shadow merge:
+    For example, your state may contain several independent variables:
+
+    constructor(props) {
+        super(props);
+        this.state = {
+        posts: [],
+        comments: []
+        };
+    }
+    Then you can update them independently with separate setState() calls:
+
+    componentDidMount() {
+        fetchPosts().then(response => {
+        this.setState({
+            posts: response.posts
+        });
+        });
+
+        fetchComments().then(response => {
+        this.setState({
+            comments: response.comments
+        });
+        });
+    }
+    The merging is shallow, so this.setState({comments}) leaves this.state.posts intact, but completely replaces this.state.comments.
+    !Warning!: only valid for key direct under state. If there is a under structure like {posts: {0: "x", 1: "xx"}, comments: {0: "y", 1: "yy"}}. "0" and "1" with their values will be overwriten by setState({posts: {0: "xxx"}}). Result will be {posts: {0: "xxx"}, comments: {0: "y", 1: "yy"}}  
+    TO prevent that problem, reconstruct obj to following {0: {post: "x", comments: "y"}, 1: {post: "xx", comments: "yy"}}  
+
+
+# setState is delayed!!!!
+    setState() does not always immediately update the component. It may batch or defer the update until later. This makes reading this.state right after calling setState() a potential pitfall. Instead, use componentDidUpdate or a setState callback (setState(updater, callback)), either of which are guaranteed to fire after the update has been applied. If you need to set the state based on the previous state, use arrow function to pass call back to setState. All changes will be then just in time!
+
+    this.setState((state, props) => {return {counter: state.counter + props.step}});
 
