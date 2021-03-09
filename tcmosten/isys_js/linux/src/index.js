@@ -9,7 +9,7 @@ import { PlusCircle } from 'react-feather';
 class AddButton extends React.Component{
   constructor(props) {
       super(props);
-      this.state = {0: {Name: ""}}; //key is string even without ""
+      this.state = {0: {Name: "", Name1: ""}}; //key is string even without ""
       this.addInput = this.addInput.bind(this)
       this.removeInput = this.removeInput.bind(this)
       this.setInput = this.setInput.bind(this)
@@ -21,7 +21,7 @@ class AddButton extends React.Component{
       const input_length = Object.keys(this.state).length
       const current_id = parseInt(Object.keys(this.state)[input_length-1])+1 
   
-      this.setState({[current_id]: {Name: ""}}) //perform a shadown merge
+      this.setState({[current_id]: {Name: "", Name1: ""}}) //perform a shadown merge
 
     }
     removeInput(id){
@@ -32,10 +32,13 @@ class AddButton extends React.Component{
       this.setState({input_obj})
     }
     
-    setInput(id,value){
+    setInput(id, name, value){
       console.log("setInput top")
       console.log("setInput value " + value)
-      this.setState({[id]: {Name: value}}) //perform a shadown merge, update will be delayed. this.state is updated after this setInput function is finished. 
+      var obj = {...this.state[id]}
+      obj[name] = value
+
+      this.setState({[id]: obj}) //perform a shadown merge, update will be delayed. this.state is updated after this setInput function is finished. 
 
 
     }
@@ -61,9 +64,9 @@ class MahnungForm extends React.Component{
     }    
 
 
-    setInput(id,value){
+    setInput(id, name, value){
       console.log("setInput middle")
-      this.props.setInput(id,value)
+      this.props.setInput(id, name, value)
     }
 
     removeTable(id) {  
@@ -117,7 +120,7 @@ class MahnungForm extends React.Component{
 class MahnungTable extends React.Component{
   constructor(props) {
       super(props);
-      this.state={name: ""}
+      this.state={name: "", name1: ""}
       this.handleClick = this.handleClick.bind(this)
       this.handleChange = this.handleChange.bind(this)
     }    
@@ -132,7 +135,7 @@ class MahnungTable extends React.Component{
       console.log("handleChange id" + this.props.id);
       console.log("handleChange name" + event.target.name);
       console.log("handleChange value" + event.target.value);
-      this.props.setInput(this.props.id, event.target.value)
+      this.props.setInput(this.props.id, event.target.name, event.target.value)
       this.setState({[event.target.name]: event.target.value})
       console.log("handleChange " + "done");     
     }
@@ -144,6 +147,10 @@ class MahnungTable extends React.Component{
           <label>
             Name:
             <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
+          </label>
+          <label>
+            Name1:
+            <input type="text" name="name1" value={this.state.name1} onChange={this.handleChange} />
           </label>
           <button type="button" key={this.props.id} onClick={this.handleClick}>
             löschen
