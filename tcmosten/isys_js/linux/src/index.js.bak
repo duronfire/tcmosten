@@ -1,0 +1,109 @@
+import React from 'react'
+import {render} from 'react-dom'
+import axios from 'axios';
+//import App from './App'
+import { PlusCircle } from 'react-feather';
+
+
+
+class AddButton extends React.Component{
+  constructor(props) {
+      super(props);
+      this.state = {input: {}}; //key is string even without ""
+
+      // This binding is necessary to make `this` work in the callback
+      this.handleAdd = this.handleAdd.bind(this);
+      this.handleDelete = this.handleDelete.bind(this);
+    }    
+
+    handleAdd(content, event) {
+      var form_array = Object.keys(this.state.input).length > 0 ? Object.assign({},this.state.input) : {}
+      const key_length = Object.keys(form_array).length
+      const current_index = key_length > 0 ? parseInt(Object.keys(form_array)[key_length-1])+1 : 0+1
+      console.log("current_index " + current_index)
+
+      const table = (
+      <li>
+        <label>
+          Name:
+          <input type="text" name="name" />
+        </label>
+        <button>
+          löschen
+        </button>
+      </li>);
+
+      form_array[current_index] = table
+      console.log("form_array keys" + Object.keys(form_array))
+
+      this.setState(
+        (state)=>({input: form_array})
+      );
+    }
+
+    handleDelete(event) {
+
+      var form_array = Object.keys(this.state.input).length > 0 ? Object.assign({},this.state.input) : {}
+      const key_length = Object.keys(form_array).length
+      const current_index = key_length > 0 ? parseInt(Object.keys(form_array)[key_length-1]) : 0    
+      delete form_array[current_index.toString()]
+      
+      this.setState(
+        (state)=>({input: form_array})
+      ); 
+    }
+
+
+
+    render() {
+      console.log("ja2")
+      return (
+        <div>
+          <button onClick={this.handleAdd}>
+          {Object.keys(this.state.input).length}
+          </button>
+          <button type="button" onClick={this.handleDelete}>
+          löschen
+          </button>
+          <table>
+            <tr>
+              <th>Pos</th>
+              <th>Content</th>
+            </tr>
+          </table>
+          <form>
+          <ul>
+          {Object.values(this.state.input)}
+          </ul>
+          <input type="submit" value="Submit" />
+          </form>
+        </div>
+      );
+    }
+}
+
+class MahnungTable extends React.Component{
+  constructor(props) {
+      super(props);
+    }    
+
+
+
+    render() {
+      console.log("s5")
+      return (
+        <li>
+          <label>
+            Name:
+            <input type="text" name="name" />
+          </label>
+          <button id={this.props.id} onClick={this.props.handleDelete}>
+            löschen
+          </button>
+        </li>
+
+      );
+
+    }
+}
+render(<AddButton />,document.getElementById('root'))

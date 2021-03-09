@@ -6,6 +6,8 @@
   "dependencies": {
     "autoprefixer": "^10.2.4",
     "axios": "^0.21.1",
+    "eslint": "^7.21.0",
+    "eslint-plugin-react": "^7.22.0",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "postcss": "^8.2.6",
@@ -27,7 +29,8 @@
     "webpack": "^5.24.2"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js --mode production"
+    "build": "webpack --config webpack.config.js --mode production",
+    "lint": "eslint --ext .js --ext .jsx src"
   },
   "author": "",
   "license": "ISC"

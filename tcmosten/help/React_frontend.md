@@ -1,6 +1,11 @@
 # Warning: 
     only Capital case for all class names!!! lower case will not work and give no error message!!!
     Arrow function for assgin object literal must use ({}), i.e. state => ({x:y}), state=>{} will not work!
+    infinit loop problem
+        render() in react component must be pure without setState. otherwise cause infinit loop.
+        setState in function of component must be cased with "if". except event handler, it will cause infinit loop.
+    if key is used, key will not be passt as argument. To get key passt, pass both id = xxx with key = xxx to component and retrieve key by id 
+
 
 # about bind():
 
@@ -42,3 +47,4 @@
     <button onClick={(e) => this.handleClick(id, e)}
     <button onClick={this.handleClick.bind(this, id)}
     In both cases, the e argument representing the React event will be passed as a **second** argument after the ID. With an arrow function, we have to pass it explicitly, but with bind any further arguments are automatically forwarded.
+

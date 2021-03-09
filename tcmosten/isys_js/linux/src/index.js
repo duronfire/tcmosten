@@ -9,53 +9,28 @@ import { PlusCircle } from 'react-feather';
 class AddButton extends React.Component{
   constructor(props) {
       super(props);
-      this.state = {input: [{0: null}]}; //key is string even without ""
-      this.deleteIdx = -1
+      this.state = {input: [{0: {Name: null}}]}; //key is string even without ""
+      this.addInput = this.addInput.bind(this)
+      this.removeInput = this.removeInput.bind(this)
       // This binding is necessary to make `this` work in the callback
-      this.handleAdd = this.handleAdd.bind(this);
-      this.handleDelete = this.handleDelete.bind(this);
     }    
 
-    handleAdd() {
-
-      var form_array = this.state.input.slice()
-      const current_index = parseInt(Object.keys(form_array)[form_array.length-1])+1
-      form_array.push({[current_index]:null})
-
-      this.setState(
-        (state)=>({input: form_array})
-      );
+    addInput(content){
+      const form_array = this.state.input.slice()
+      form_array.puch(content)
+      this.setState((state)=>({input: form_array}))
     }
-
-    handleDelete(event) {
-      var form_array = this.state.input.slice()
-      for (let i of form_array){
-        let _key = Object.keys(i)[0]
-        console.log("_key " + _key)
-        console.log("key " + event.target.key)
-        if (_key == event.target.key){
-          const index = form_array.indexOf(i);
-          form_array.splice(index, 1);
-          this.deleteIdx = index
-          console.log("deleteIdx1 " + deleteIdx)
-          break
-        }
-      }
-      this.setState(
-        (state)=>({input: form_array})
-      );
-      
+    removeInput(id){
+      const form_array = this.state.input.slice()
+      form_array.splice(id, 1);
+      this.setState((state)=>({input: form_array}))
     }
 
     render() {
       console.log("ja2")
       return (
         <div>
-          <button onClick={this.handleAdd}>
-          {this.state.input.length}
-          </button>
-
-          <MahnungForm action_signal={this.state.input[this.state.input.length-1]} getKey={this.handleDelete} deleteIdx={this.deleteIdx}></MahnungForm>
+          <MahnungForm addInput={this.addInput} removeInput={this.addInput} />
         </div>
       );
     }
@@ -64,9 +39,38 @@ class AddButton extends React.Component{
 class MahnungForm extends React.Component{
   constructor(props) {
       super(props);
-      this.state = {formtables:[]} //wrapper MahnungTable
-      //this.handleAction = this.handleAction.bind(this)
+      this.state = {formtable:{}} //wrapper MahnungTable
+      this.handleAdd = this.handleAdd.bind(this);
+      //this.handleDelete = this.handleDelete.bind(this);
+      //this.removeTable = this.removeTable.bind(this)
     }    
+
+
+
+
+    removeTable(id) {  
+      console.log("removeTable")
+      const target = {}
+      const source = this.state.formtable
+      var formtable_obj = Object.keys(source).length > 0 ? Object.assign(target, source) : {}
+      delete formtable_obj[id]
+
+      this.setState(
+        (state)=>({formtable: formtable_obj})
+      );
+    }
+
+    handleAdd() {
+      const target = {}
+      const source = this.state.formtable
+      var formtable_obj = Object.keys(source).length > 0 ? Object.assign(target, source) : {}
+      const formtable_length = Object.keys(formtable_obj).length
+      const current_id = formtable_length > 0 ? parseInt(Object.keys(formtable_obj)[formtable_length-1])+1 : 1
+      formtable_obj[current_id] = <MahnungTable key={current_id} id={current_id} removeTable={this.removeTable.bind(this)} />
+      this.setState(
+        (state)=>({formtable: formtable_obj})
+      );
+    }
 
     handleAction(){
       const action_signal = parseInt(Object.keys(this.props.action_signal)[0]) //if > 0 is add <0 is remove
@@ -99,12 +103,12 @@ class MahnungForm extends React.Component{
 
     render() {
 
-      this.handleAction()
-
-
       //problem
       return (
         <fragment>
+          <button onClick={this.handleAdd}>
+            {Object.keys(this.state.formtable).length}
+          </button>
           <table>
             <tr>
               <th>Pos</th>
@@ -113,7 +117,7 @@ class MahnungForm extends React.Component{
           </table>
           <form>
           <ul>
-          {this.state.formtables}
+            {Object.values(this.state.formtable)}
           </ul>
           <input type="submit" value="Submit" />
           </form>
@@ -125,8 +129,14 @@ class MahnungForm extends React.Component{
 class MahnungTable extends React.Component{
   constructor(props) {
       super(props);
+      this.handleClick = this.handleClick.bind(this)
     }    
 
+    handleClick(){
+      console.log("handleClick " + this.props.id);
+      this.props.removeTable(this.props.id)
+      console.log("handleClick " + "done");
+    }
 
     render() {
       console.log("s5")
@@ -136,7 +146,7 @@ class MahnungTable extends React.Component{
             Name:
             <input type="text" name="name" />
           </label>
-          <button key={this.props.key} onClick={this.props.getKey}>
+          <button type="button" key={this.props.id} onClick={this.handleClick}>
             löschen
           </button>
         </li>
